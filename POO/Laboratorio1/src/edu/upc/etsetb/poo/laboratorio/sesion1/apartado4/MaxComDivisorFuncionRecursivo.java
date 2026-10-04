@@ -7,7 +7,7 @@ package edu.upc.etsetb.poo.laboratorio.sesion1.apartado4;
 
 /**
  *
- * @author adamelbouchaibi un puto genio
+ * @author adamelbouchaibi un puto genio jeje
  */
 public class MaxComDivisorFuncionRecursivo {
 
