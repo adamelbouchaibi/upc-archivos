@@ -1,0 +1,285 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{hyperref}
+
+\lstdefinestyle{javastyle}{
+  language=Java,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue!70!black}\bfseries,
+  commentstyle=\color{green!40!black},
+  stringstyle=\color{red!60!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=6pt,
+  stepnumber=1,
+  firstnumber=1,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=4,
+  extendedchars=true,
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+           {Á}{{\'A}}1 {É}{{\'E}}1 {ñ}{{\~n}}1
+}
+\lstset{style=javastyle}
+
+\newcommand{\cod}[1]{\lstinline[basicstyle=\ttfamily\footnotesize]|#1|}
+\renewcommand{\arraystretch}{1.3}
+
+\title{Laboratorio 1 -- Primeros desarrollos\\
+\large Sesión 1: Algoritmo de Euclides para el MCD en Java}
+\author{Adam El Bouchaibi Charrout}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+%=====================================================================
+\section{Códigos Java}
+%=====================================================================
+La numeración de líneas que aparece a la izquierda de cada listado es la que se utiliza en todas las tablas de este documento (la línea 1 es la declaración \texttt{package}).
+
+\subsection{Apartado 4.2: versión iterativa en \texttt{main}}
+Package: \texttt{edu.upc.etsetb.poo.laboratorio.sesion1.apartado2}\\
+Clase: \texttt{MaxComDivisorMainIterativo}
+
+\begin{lstlisting}
+package edu.upc.etsetb.poo.laboratorio.sesion1.apartado2;
+
+public class MaxComDivisorMainIterativo {
+
+    public static void main(String[] args) {
+
+        int m = 8, n = 16, dividendo, divisor, resto;
+
+        if (m > n) {
+            dividendo = m;
+            divisor = n;
+        } else {
+            dividendo = n;
+            divisor = m;
+        }
+
+        resto = dividendo % divisor;
+
+        while (resto != 0) {
+            dividendo = divisor;
+            divisor = resto;
+            resto = dividendo % divisor;
+        }
+
+        System.out.println("El MCD es: " + divisor);
+    }
+}
+\end{lstlisting}
+
+\subsection{Apartado 4.3: versión iterativa con función}
+Package: \texttt{edu.upc.etsetb.poo.laboratorio.sesion1.apartado3}\\
+Clase: \texttt{MaxComDivisorFuncionIterativo}
+
+\begin{lstlisting}
+package edu.upc.etsetb.poo.laboratorio.sesion1.apartado3;
+
+public class MaxComDivisorFuncionIterativo {
+
+    public static void main(String[] args) {
+
+        int m = 40, n = 16;
+
+        MaxComDivisorFuncionIterativo obj = new MaxComDivisorFuncionIterativo();
+        int res = obj.mcd(m, n);
+        System.out.println("El máximo común divisor entre " + m + " y " + n + " es: " + res);
+    }
+
+    public int mcd(int dividendo, int divisor) {
+        int m = dividendo, n = divisor, resto;
+
+        if (m > n) {
+            dividendo = m;
+            divisor = n;
+        } else {
+            dividendo = n;
+            divisor = m;
+        }
+
+        resto = dividendo % divisor;
+
+        while (resto != 0) {
+            dividendo = divisor;
+            divisor = resto;
+            resto = dividendo % divisor;
+        }
+
+        return divisor;
+    }
+}
+\end{lstlisting}
+
+\subsection{Apartado 4.4: versión recursiva}
+Package: \texttt{edu.upc.etsetb.poo.laboratorio.sesion1.apartado4}\\
+Clase: \texttt{MaxComDivisorFuncionRecursivo}
+
+\begin{lstlisting}
+package edu.upc.etsetb.poo.laboratorio.sesion1.apartado4;
+
+public class MaxComDivisorFuncionRecursivo {
+
+    public static void main(String[] args) {
+
+        int m = 40, n = 16;
+
+        MaxComDivisorFuncionRecursivo obj = new MaxComDivisorFuncionRecursivo();
+        int res = obj.mcd(m, n);
+        System.out.println("El máximo común divisor entre " + m + " y " + n + " es: " + res);
+    }
+
+    public int mcd(int dividendo, int divisor) {
+
+        if (divisor == 0) {
+            return dividendo;
+        } else {
+            return mcd(divisor, dividendo % divisor);
+        }
+    }
+}
+\end{lstlisting}
+
+\newpage
+%=====================================================================
+\section{Cuestionario y tablas del laboratorio}
+%=====================================================================
+
+%---------------------------------------------------------------------
+\subsection{Apartado 4.1: implementación en el \texttt{main()}}
+%---------------------------------------------------------------------
+Las líneas citadas corresponden al listado de \texttt{MaxComDivisorMainIterativo} (apartado 4.2 del código).
+
+\paragraph{1. ¿Cuándo \textbf{no} se ejecutará el bucle?}
+El bucle no se ejecuta cuando el primer resto calculado ya es cero, es decir, cuando el divisor (el menor de los dos números) divide exactamente al dividendo (el mayor). Esto incluye el caso $m=n$. La condición de entrada al bucle es:
+\begin{itemize}
+  \item Línea 19: \cod{while (resto != 0) \{}
+\end{itemize}
+y el primer resto se calcula en:
+\begin{itemize}
+  \item Línea 17: \cod{resto = dividendo \% divisor;}
+\end{itemize}
+
+\paragraph{2. ¿Qué valor deberá tomar entonces el resultado?}
+El resultado es el propio divisor, es decir, el menor de los dos números, ya que no hay ninguna iteración que lo modifique. La línea que lo muestra es:
+\begin{itemize}
+  \item Línea 25: \cod{System.out.println("El MCD es: " + divisor);}
+\end{itemize}
+
+\paragraph{Tabla de comprobación.}
+\begin{center}
+\begin{tabular}{rrrc}
+\toprule
+$m$ & $n$ & MCD resultante & ¿Cuántas veces se ejecuta el bucle? \\
+\midrule
+8   & 16  & 8  & 0 \\
+40  & 16  & 8  & 1 \\
+13  & 120 & 1  & 2 \\
+165 & 616 & 11 & 4 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%---------------------------------------------------------------------
+\subsection{Apartado 4.2: depuración iterativa}
+%---------------------------------------------------------------------
+El breakpoint se coloca dentro del bucle, en la línea que calcula el nuevo resto, de modo que el depurador se detiene una vez por iteración:
+\begin{itemize}
+  \item Línea 22: \cod{resto = dividendo \% divisor;}
+\end{itemize}
+En la columna de restos sucesivos se incluye el primer resto (calculado en la línea 17, antes del bucle) y el último, que es 0.
+
+\begin{center}
+\footnotesize
+\begin{tabular}{rr c p{4.1cm} c p{3.8cm}}
+\toprule
+$m$ & $n$ & Iteraciones & Restos sucesivos & Línea del breakpoint & Línea textual del breakpoint \\
+\midrule
+8   & 16   & 0 & 0 & 22 (no se alcanza) & \cod{resto = dividendo \% divisor;} \\
+40  & 16   & 1 & 8, 0 & 22 & \cod{resto = dividendo \% divisor;} \\
+13  & 120  & 2 & 3, 1, 0 & 22 & \cod{resto = dividendo \% divisor;} \\
+165 & 616  & 4 & 121, 44, 33, 11, 0 & 22 & \cod{resto = dividendo \% divisor;} \\
+64  & 1024 & 0 & 0 & 22 (no se alcanza) & \cod{resto = dividendo \% divisor;} \\
+443 & 701  & 8 & 258, 185, 73, 39, 34, 5, 4, 1, 0 & 22 & \cod{resto = dividendo \% divisor;} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Observación.} En los pares $(8,16)$ y $(64,1024)$ el divisor divide al dividendo, por lo que el bucle no se ejecuta y el breakpoint de la línea 22 no llega a activarse. Para ver el único resto calculado en esos casos hay que colocar un breakpoint adicional en la línea 17 (\cod{resto = dividendo \% divisor;}, fuera del bucle).
+
+\bigskip
+\noindent\textbf{MCD obtenido:} $(8,16)\to 8$; $(40,16)\to 8$; $(13,120)\to 1$; $(165,616)\to 11$; $(64,1024)\to 64$; $(443,701)\to 1$.
+
+%---------------------------------------------------------------------
+\subsection{Apartado 4.5: depuración de la función recursiva}
+%---------------------------------------------------------------------
+Los breakpoints se colocan en las dos instrucciones \texttt{return} de \texttt{MaxComDivisorFuncionRecursivo}:
+\begin{itemize}
+  \item Línea 17 (caso base): \cod{return dividendo;}
+  \item Línea 19 (llamada recursiva): \cod{return mcd(divisor, dividendo \% divisor);}
+\end{itemize}
+La columna \emph{resto} es el segundo argumento de la invocación recursiva, \cod{dividendo \% divisor}. En la llamada que ejecuta el caso base no hay nueva invocación, por lo que se indica ``--''.
+
+\paragraph{Caso 1: $m=8$, $n=16$} (resultado: 8)
+\begin{center}
+\footnotesize
+\begin{tabular}{c r r c c p{5.2cm}}
+\toprule
+Invocación & dividendo & divisor & resto & Línea del \texttt{return} & Línea textual \\
+\midrule
+1 & 8  & 16 & 8  & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+2 & 16 & 8  & 0  & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+3 & 8  & 0  & -- & 17 & \cod{return dividendo;} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Caso 2: $m=16$, $n=40$} (resultado: 8)
+\begin{center}
+\footnotesize
+\begin{tabular}{c r r c c p{5.2cm}}
+\toprule
+Invocación & dividendo & divisor & resto & Línea del \texttt{return} & Línea textual \\
+\midrule
+1 & 16 & 40 & 16 & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+2 & 40 & 16 & 8  & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+3 & 16 & 8  & 0  & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+4 & 8  & 0  & -- & 17 & \cod{return dividendo;} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Caso 3: $m=616$, $n=165$} (resultado: 11)
+\begin{center}
+\footnotesize
+\begin{tabular}{c r r c c p{5.2cm}}
+\toprule
+Invocación & dividendo & divisor & resto & Línea del \texttt{return} & Línea textual \\
+\midrule
+1 & 616 & 165 & 121 & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+2 & 165 & 121 & 44  & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+3 & 121 & 44  & 33  & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+4 & 44  & 33  & 11  & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+5 & 33  & 11  & 0   & 19 & \cod{return mcd(divisor, dividendo \% divisor);} \\
+6 & 11  & 0   & --  & 17 & \cod{return dividendo;} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Nota.} La versión recursiva entregada no intercambia los argumentos para que el dividendo sea el mayor. Por eso, cuando $m<n$ (casos 1 y 2), la primera invocación realiza una llamada extra que simplemente intercambia los valores (en el caso 1, \texttt{mcd(8, 16)} produce \texttt{mcd(16, 8)}). El resultado final es correcto en todos los casos.
+
+\end{document}
