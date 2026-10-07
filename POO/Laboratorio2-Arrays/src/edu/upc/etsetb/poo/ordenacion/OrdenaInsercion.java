@@ -23,12 +23,12 @@ public class OrdenaInsercion {
         }
         System.out.print("]");
         
-        for(int i=1;i<arrayEnteros.length-1;i++){
+        for(int i=1;i<arrayEnteros.length;i++){
             
             int ref=arrayEnteros[i];
             int j =i-1, aux;
             
-            while(j<=0 && arrayEnteros[j]>ref){
+            while(j>=0 && arrayEnteros[j]>ref){
                 
                 aux=arrayEnteros[j+1];
                 arrayEnteros[j+1]=arrayEnteros[j];
