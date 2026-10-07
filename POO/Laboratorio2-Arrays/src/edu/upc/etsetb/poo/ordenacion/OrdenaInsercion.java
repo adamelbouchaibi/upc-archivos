@@ -40,5 +40,12 @@ public class OrdenaInsercion {
             arrayEnteros[j+1]=ref;
         
         }
+        System.out.print("[ ");
+        
+        for (int i=0; i<arrayEnteros.length;i++){
+            
+            System.out.print(arrayEnteros[i]+ ", ");
+        }
+        System.out.print("]");
     }
 }
