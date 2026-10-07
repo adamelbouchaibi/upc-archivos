@@ -26,13 +26,11 @@ public class OrdenaInsercion {
         for(int i=1;i<arrayEnteros.length;i++){
             
             int ref=arrayEnteros[i];
-            int j =i-1, aux;
+            int j =i-1;
             
             while(j>=0 && arrayEnteros[j]>ref){
                 
-                aux=arrayEnteros[j+1];
                 arrayEnteros[j+1]=arrayEnteros[j];
-                arrayEnteros[j]=aux;
                 
                 j=j-1;   
             }
