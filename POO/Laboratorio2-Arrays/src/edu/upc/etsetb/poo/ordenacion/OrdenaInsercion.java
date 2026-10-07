@@ -34,7 +34,7 @@ public class OrdenaInsercion {
                 arrayEnteros[j+1]=arrayEnteros[j];
                 arrayEnteros[j]=aux;
                 
-                j-=1;   
+                j=j-1;   
             }
             
             arrayEnteros[j+1]=ref;
