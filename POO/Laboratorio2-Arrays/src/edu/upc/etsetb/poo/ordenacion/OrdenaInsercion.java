@@ -18,7 +18,7 @@ public class OrdenaInsercion {
         
         for (int i=0; i<arrayEnteros.length;i++){
             
-            System.out.print(arrayEnteros[i]+ " ");
+            System.out.print(arrayEnteros[i]+ ", ");
         }
         
     }
