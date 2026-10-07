@@ -14,12 +14,13 @@ public class OrdenaInsercion {
         /*INSERTAR aquí el código que declara, crea e inicializa convenientemente el array de enteros
             {30, 15, 2, 21, 44, 8}*/
         
+        System.out.print("[ ");
         int arrayEnteros[]={30, 15, 2, 21, 44, 8};
         
         for (int i=0; i<arrayEnteros.length;i++){
             
             System.out.print(arrayEnteros[i]+ ", ");
         }
-        
+        System.out.print("]");
     }
 }
