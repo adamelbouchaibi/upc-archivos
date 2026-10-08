@@ -16,7 +16,7 @@ public class TestAlumnePOO {
         a.setNotaParcial(6.0);
         a.setNotaLab(8.0);
         
-        System.out.println("La nota de la assignatura del alumne "+getNom()+" "+ a.avalua());
+        System.out.println("La nota de la assignatura del alumne "+a.getNom()+" "+ a.avalua());
         
     }
 }
