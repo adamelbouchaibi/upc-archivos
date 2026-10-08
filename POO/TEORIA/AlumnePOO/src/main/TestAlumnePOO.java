@@ -22,7 +22,7 @@ public class TestAlumnePOO {
         System.out.println("Nota lab: "+a.getNotaLab());
         System.out.println("Nota parcial: "+a.getNotaParcial());
         System.out.println("Nota final: "+a.getNotaFinal());
-        System.put.println("\n");
+        System.out.println("\n");
         System.out.println(a.toString());
     }
 }
