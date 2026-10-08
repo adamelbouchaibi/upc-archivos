@@ -16,13 +16,19 @@ public class TestAlumnePOO {
         a.setNotaParcial(6.0);
         a.setNotaLab(8.0);
         
+        
+        /*
         System.out.println("La nota de la assignatura del alumne "+a.getNom()+" és "+ a.avalua());
         System.out.println("Nom: "+a.getNom());
         System.out.println("NIF: "+a.getNif());
         System.out.println("Nota lab: "+a.getNotaLab());
         System.out.println("Nota parcial: "+a.getNotaParcial());
         System.out.println("Nota final: "+a.getNotaFinal());
-        System.out.println("\n");
+        System.out.println("\n"); 
+        
+        */
+        
         System.out.println(a.toString());
+        System.out.println(a);
     }
 }
