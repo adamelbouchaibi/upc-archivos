@@ -16,7 +16,7 @@ public class TestAlumnePOO {
         a.setNotaParcial(6);
         a.setNotaLab(8);
         
-        
+        System.out.println(a.avalua());
         
     }
 }
