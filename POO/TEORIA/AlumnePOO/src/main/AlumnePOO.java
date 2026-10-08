@@ -60,4 +60,16 @@ public class AlumnePOO {
             return 0.25*this.notaLab+0.2*this.notaParcial+0.55*this.notaFinal;
         } else return 0.25*this.notaLab+0.75*this.notaFinal;
     }
+    
+    @Override
+    public String toString(){
+       String s = "Nom: "+this.nom+"\n";
+       s+="NIF: "+this.nif+ "\n";
+       s+="Nota lab: "+this.notaLab + "\n";
+       s+="Nota parcial: "+this.notaParcial +"\n";
+       s+="Nota final: "+this.notaFinal +"\n";
+       s+="Nota final POO: "+this.avalua();
+       
+    return s;
+    }
 }
