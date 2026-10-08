@@ -23,6 +23,6 @@ public class TestAlumnePOO {
         System.out.println("Nota parcial: "+a.getNotaParcial());
         System.out.println("Nota final: "+a.getNotaFinal());
         
-        a.toString();
+        System.out.println(a.toString());
     }
 }
