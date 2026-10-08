@@ -28,7 +28,8 @@ public class TestAlumnePOO {
         
         */
         
-        System.out.println(a.toString());
+        // System.out.println(a.toString());
+        
         System.out.println(a);
     }
 }
