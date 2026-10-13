@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma Espacio-Tiempo (4 Paquetes) - Ejercicio 1.7</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        .packet-p1 { fill: #3b82f6; fill-opacity: 0.85; stroke: #60a5fa; stroke-width: 2; }
+        .packet-p2 { fill: #f97316; fill-opacity: 0.85; stroke: #fb923c; stroke-width: 2; }
+        .packet-p3 { fill: #10b981; fill-opacity: 0.85; stroke: #34d399; stroke-width: 2; }
+        .packet-p4 { fill: #a855f7; fill-opacity: 0.85; stroke: #c084fc; stroke-width: 2; }
+
+        .packet-highlight {
+            fill-opacity: 1 !important;
+            filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.6));
+        }
+
+        .packet-dim {
+            opacity: 0.25;
+        }
+
+        .proc-box {
+            fill: #ef4444;
+            fill-opacity: 0.25;
+            stroke: #f87171;
+            stroke-width: 1.5;
+            stroke-dasharray: 3 3;
+        }
+
+        .time-cursor {
+            stroke: #e2e8f0;
+            stroke-width: 2;
+            stroke-dasharray: 4 4;
+        }
+
+        /* SVG text rules */
+        text {
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4 md:p-6">
+
+    <!-- Header -->
+    <header class="max-w-7xl mx-auto w-full mb-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-800/80 p-5 rounded-2xl border border-slate-700 shadow-xl backdrop-blur-md">
+            <div>
+                <h1 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <span class="bg-blue-600 text-xs px-2.5 py-1 rounded-md font-mono tracking-wider">EJERCICIO 1.7</span>
+                    Diagrama Espacio-Tiempo (4 Paquetes)
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">
+                    Visualización exacta de propagación nula ($D = 0$) y solapamiento (*pipelining*) de transmisión en Store & Forward.
+                </p>
+            </div>
+
+            <!-- Packet Selector Legend -->
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="selectPacket('all')" id="btn-all" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-white hover:bg-slate-600 transition border border-slate-600">
+                    Ver Todos
+                </button>
+                <button onclick="selectPacket(1)" id="btn-p1" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-900/60 text-blue-300 hover:bg-blue-800/80 border border-blue-500/50 transition flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Paquete 1
+                </button>
+                <button onclick="selectPacket(2)" id="btn-p2" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-orange-900/60 text-orange-300 hover:bg-orange-800/80 border border-orange-500/50 transition flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Paquete 2
+                </button>
+                <button onclick="selectPacket(3)" id="btn-p3" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900/60 text-emerald-300 hover:bg-emerald-800/80 border border-emerald-500/50 transition flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Paquete 3
+                </button>
+                <button onclick="selectPacket(4)" id="btn-p4" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-900/60 text-purple-300 hover:bg-purple-800/80 border border-purple-500/50 transition flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Paquete 4
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1">
+
+        <!-- SVG Canvas Section (3 Columns) -->
+        <div class="lg:col-span-3 bg-slate-800/50 rounded-2xl border border-slate-700 p-4 md:p-6 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+            
+            <!-- Player Toolbar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-900/80 p-3 rounded-xl border border-slate-700 mb-4">
+                <div class="flex items-center gap-2">
+                    <button id="btn-play" onclick="togglePlay()" class="p-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition flex items-center justify-center w-10 h-10 shadow-lg">
+                        <svg id="icon-play" class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="icon-pause" class="w-5 h-5 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button onclick="resetSim()" class="p-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition flex items-center justify-center w-10 h-10" title="Reiniciar">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Slider -->
+                <div class="flex-1 flex items-center gap-3 px-2 min-w-[200px]">
+                    <span class="text-xs font-mono text-slate-400">0 ms</span>
+                    <input type="range" id="time-range" min="0" max="28" step="0.25" value="0" oninput="onSliderInput(this.value)" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                    <span class="text-xs font-mono text-slate-400">28 ms</span>
+                </div>
+
+                <!-- Current Time Display -->
+                <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-600 font-mono text-sm text-blue-400 font-bold min-w-[90px] text-center">
+                    t = <span id="time-display">0.00</span> ms
+                </div>
+            </div>
+
+            <!-- SVG Diagram Scrollable Wrapper -->
+            <div class="overflow-x-auto w-full flex justify-center">
+                <svg id="cronograma-svg" width="760" height="880" class="bg-slate-900 rounded-xl border border-slate-800">
+                    <!-- SVG CONTENT INJECTED BY JAVASCRIPT -->
+                </svg>
+            </div>
+        </div>
+
+        <!-- Information Sidebar (1 Column) -->
+        <div class="flex flex-col gap-5">
+            
+            <!-- Real-time Status Card -->
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Estado en t = <span id="info-time">0.00</span> ms
+                </h2>
+                
+                <div id="status-feed" class="space-y-2.5 text-xs">
+                    <!-- Dynamic state status will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Key Physical Insights -->
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-5 shadow-xl space-y-3">
+                <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                    💡 Conceptos Clave del Diagrama
+                </h3>
+                <ul class="text-xs text-slate-300 space-y-2.5 leading-relaxed">
+                    <li class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-700/50">
+                        <strong class="text-blue-400 block mb-0.5">Propagación nula ($D = 0$):</strong>
+                        Los bloques de transmisión son completamente horizontales. Los bits llegan al instante al siguiente nodo al ser transmitidos.
+                    </li>
+                    <li class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-700/50">
+                        <strong class="text-amber-400 block mb-0.5">Cuello de Botella ($T_c = 4\text{ ms}$):</strong>
+                        Fíjate en el **Nodo 3** o el **Enlace 3**: trabajan de forma ininterrumpida sin huecos desde $t = 8\text{ ms}$ hasta $t = 28\text{ ms}$.
+                    </li>
+                    <li class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-700/50">
+                        <strong class="text-emerald-400 block mb-0.5">Cadencia de Salida:</strong>
+                        Los paquetes terminan a los $16\text{ ms}$, $20\text{ ms}$, $24\text{ ms}$ y $28\text{ ms}$. Cada uno tarda $16\text{ ms}$ individualmente, ¡pero salen cada $4\text{ ms}$!
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Formula Box -->
+            <div class="bg-blue-950/40 border border-blue-800/50 rounded-2xl p-5 shadow-xl">
+                <h3 class="text-xs font-bold text-blue-300 uppercase tracking-wider mb-2">Fórmula de Tiempo Total</h3>
+                <div class="font-mono text-sm text-white bg-slate-900/80 p-3 rounded-lg border border-blue-900/60 text-center">
+                    T<sub>obs</sub> = T<sub>primer</sub> + (N - 1) · T<sub>c</sub>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">
+                    Para 4 paquetes: <br>
+                    <span class="font-mono text-slate-300">T<sub>obs</sub> = 16ms + (4 - 1) · 4ms = 28 ms</span>
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // --- DATA STRUCTURES FOR THE 4 PACKETS ---
+        const PACKETS = [
+            {
+                id: 1,
+                name: 'Paquete 1',
+                colorClass: 'packet-p1',
+                hex: '#3b82f6',
+                stages: [
+                    { type: 'tx', link: 'Enlace 1 (Acceso)', fromNode: 1, toNode: 2, tStart: 0, tEnd: 4, label: 'P1 (4ms)' },
+                    { type: 'proc', node: 2, tStart: 4, tEnd: 6, label: 'Tp1=2ms' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 6, tEnd: 7, label: 'P1.1 (1ms)' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 7, tEnd: 8, label: 'P1.2 (1ms)' },
+                    { type: 'proc', node: 3, tStart: 8, tEnd: 12, label: 'Tp2=4ms' },
+                    { type: 'tx', link: 'Enlace 3 (Acceso)', fromNode: 3, toNode: 4, tStart: 12, tEnd: 16, label: 'P1 (4ms)' }
+                ]
+            },
+            {
+                id: 2,
+                name: 'Paquete 2',
+                colorClass: 'packet-p2',
+                hex: '#f97316',
+                stages: [
+                    { type: 'tx', link: 'Enlace 1 (Acceso)', fromNode: 1, toNode: 2, tStart: 4, tEnd: 8, label: 'P2 (4ms)' },
+                    { type: 'proc', node: 2, tStart: 8, tEnd: 10, label: 'Tp1=2ms' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 10, tEnd: 11, label: 'P2.1 (1ms)' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 11, tEnd: 12, label: 'P2.2 (1ms)' },
+                    { type: 'proc', node: 3, tStart: 12, tEnd: 16, label: 'Tp2=4ms' },
+                    { type: 'tx', link: 'Enlace 3 (Acceso)', fromNode: 3, toNode: 4, tStart: 16, tEnd: 20, label: 'P2 (4ms)' }
+                ]
+            },
+            {
+                id: 3,
+                name: 'Paquete 3',
+                colorClass: 'packet-p3',
+                hex: '#10b981',
+                stages: [
+                    { type: 'tx', link: 'Enlace 1 (Acceso)', fromNode: 1, toNode: 2, tStart: 8, tEnd: 12, label: 'P3 (4ms)' },
+                    { type: 'proc', node: 2, tStart: 12, tEnd: 14, label: 'Tp1=2ms' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 14, tEnd: 15, label: 'P3.1 (1ms)' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 15, tEnd: 16, label: 'P3.2 (1ms)' },
+                    { type: 'proc', node: 3, tStart: 16, tEnd: 20, label: 'Tp2=4ms' },
+                    { type: 'tx', link: 'Enlace 3 (Acceso)', fromNode: 3, toNode: 4, tStart: 20, tEnd: 24, label: 'P3 (4ms)' }
+                ]
+            },
+            {
+                id: 4,
+                name: 'Paquete 4',
+                colorClass: 'packet-p4',
+                hex: '#a855f7',
+                stages: [
+                    { type: 'tx', link: 'Enlace 1 (Acceso)', fromNode: 1, toNode: 2, tStart: 12, tEnd: 16, label: 'P4 (4ms)' },
+                    { type: 'proc', node: 2, tStart: 16, tEnd: 18, label: 'Tp1=2ms' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 18, tEnd: 19, label: 'P4.1 (1ms)' },
+                    { type: 'tx', link: 'Enlace 2 (Transporte)', fromNode: 2, toNode: 3, tStart: 19, tEnd: 20, label: 'P4.2 (1ms)' },
+                    { type: 'proc', node: 3, tStart: 20, tEnd: 24, label: 'Tp2=4ms' },
+                    { type: 'tx', link: 'Enlace 3 (Acceso)', fromNode: 3, toNode: 4, tStart: 24, tEnd: 28, label: 'P4 (4ms)' }
+                ]
+            }
+        ];
+
+        // --- SVG DIMENSIONS & MAP ---
+        const NODE_X = { 1: 140, 2: 310, 3: 480, 4: 650 };
+        const TIME_OFFSET_Y = 70;
+        const TIME_SCALE_Y = 26; // 1 ms = 26 pixels vertically
+        const MAX_TIME = 28;
+
+        let currentTime = 0;
+        let isPlaying = false;
+        let selectedPacketFilter = 'all';
+        let animationFrameId = null;
+
+        function getY(time) {
+            return TIME_OFFSET_Y + time * TIME_SCALE_Y;
+        }
+
+        function renderSVG() {
+            const svg = document.getElementById('cronograma-svg');
+            let html = '';
+
+            // 1. Grid Background & Time Ticks
+            for (let t = 0; t <= MAX_TIME; t += 2) {
+                const y = getY(t);
+                html += `
+                    <line x1="80" y1="${y}" x2="700" y2="${y}" stroke="#334155" stroke-width="1" stroke-dasharray="2 2"/>
+                    <text x="65" y="${y + 4}" fill="#94a3b8" font-size="11" font-family="monospace" text-anchor="end">${t} ms</text>
+                `;
+            }
+
+            // 2. Node Vertical Lines & Headers
+            const nodes = [
+                { id: 1, name: 'Nodo 1', sub: 'Emisor' },
+                { id: 2, name: 'Nodo 2', sub: 'Encapsula/Frag' },
+                { id: 3, name: 'Nodo 3', sub: 'Desencapsula' },
+                { id: 4, name: 'Nodo 4', sub: 'Receptor' }
+            ];
+
+            nodes.forEach(node => {
+                const x = NODE_X[node.id];
+                html += `
+                    <!-- Node Line -->
+                    <line x1="${x}" y1="${TIME_OFFSET_Y - 15}" x2="${x}" y2="${getY(MAX_TIME) + 15}" stroke="#475569" stroke-width="2" stroke-dasharray="4 4"/>
+                    
+                    <!-- Node Header -->
+                    <rect x="${x - 55}" y="15" width="110" height="38" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+                    <text x="${x}" y="31" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">${node.name}</text>
+                    <text x="${x}" y="44" fill="#94a3b8" font-size="9" text-anchor="middle">${node.sub}</text>
+                `;
+            });
+
+            // 3. Render Processing Boxes (Red dashed)
+            PACKETS.forEach(pkt => {
+                const isPktSelected = (selectedPacketFilter === 'all' || selectedPacketFilter === pkt.id);
+                pkt.stages.filter(s => s.type === 'proc').forEach(stg => {
+                    const x = NODE_X[stg.node];
+                    const y1 = getY(stg.tStart);
+                    const y2 = getY(stg.tEnd);
+                    const height = y2 - y1;
+                    const opacityClass = isPktSelected ? '' : 'packet-dim';
+
+                    html += `
+                        <g class="${opacityClass}">
+                            <rect x="${x - 12}" y="${y1}" width="24" height="${height}" rx="4" class="proc-box"/>
+                            <text x="${x + 16}" y="${y1 + height / 2 + 3}" fill="#f87171" font-size="9" font-family="monospace">${stg.label}</text>
+                        </g>
+                    `;
+                });
+            });
+
+            // 4. Render Transmission Blocks (Polygons)
+            PACKETS.forEach(pkt => {
+                const isPktSelected = (selectedPacketFilter === 'all' || selectedPacketFilter === pkt.id);
+                const opacityClass = isPktSelected ? '' : 'packet-dim';
+
+                pkt.stages.filter(s => s.type === 'tx').forEach((stg, idx) => {
+                    const x1 = NODE_X[stg.fromNode];
+                    const x2 = NODE_X[stg.toNode];
+                    const y1 = getY(stg.tStart);
+                    const y2 = getY(stg.tEnd);
+
+                    // Polygon coordinates: D=0 means horizontal top edge (x1, y1) -> (x2, y1)
+                    const points = `${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`;
+                    const midX = (x1 + x2) / 2;
+                    const midY = (y1 + y2) / 2;
+
+                    html += `
+                        <g class="packet-group ${opacityClass}" cursor="pointer" onclick="selectPacket(${pkt.id})">
+                            <polygon points="${points}" class="${pkt.colorClass} ${isPktSelected ? '' : ''}"/>
+                            <text x="${midX}" y="${midY + 3}" class="pkt-text" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">${stg.label}</text>
+                        </g>
+                    `;
+                });
+            });
+
+            // 5. Render Time Cursor Line
+            const cursorY = getY(currentTime);
+            html += `
+                <g id="time-cursor-group">
+                    <line x1="60" y1="${cursorY}" x2="720" y2="${cursorY}" class="time-cursor"/>
+                    <circle cx="60" cy="${cursorY}" r="4" fill="#60a5fa"/>
+                    <text x="50" y="${cursorY + 4}" fill="#60a5fa" font-size="10" font-weight="bold" font-family="monospace" text-anchor="end">${currentTime.toFixed(1)}ms</text>
+                </g>
+            `;
+
+            svg.innerHTML = html;
+        }
+
+        function updateStatusFeed() {
+            document.getElementById('time-display').innerText = currentTime.toFixed(2);
+            document.getElementById('info-time').innerText = currentTime.toFixed(2);
+            
+            const feedContainer = document.getElementById('status-feed');
+            let feedHtml = '';
+
+            let activeEvents = [];
+
+            PACKETS.forEach(pkt => {
+                pkt.stages.forEach(stg => {
+                    if (currentTime >= stg.tStart && currentTime <= stg.tEnd) {
+                        if (stg.type === 'tx') {
+                            activeEvents.push({
+                                pkt: pkt,
+                                text: `Transmitiendo por ${stg.link}`,
+                                detail: `(${stg.label}) de Nodo ${stg.fromNode} a Nodo ${stg.toNode}`
+                            });
+                        } else if (stg.type === 'proc') {
+                            activeEvents.push({
+                                pkt: pkt,
+                                text: `Procesando en Nodo ${stg.node}`,
+                                detail: `${stg.node === 2 ? 'Encapsulando/Fragmentando' : 'Desencapsulando/Reensamblando'} (${stg.label})`
+                            });
+                        }
+                    }
+                });
+            });
+
+            if (activeEvents.length === 0) {
+                feedHtml = `<p class="text-slate-500 italic">La red está inactiva en este instante.</p>`;
+            } else {
+                activeEvents.forEach(ev => {
+                    feedHtml += `
+                        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-700/80 flex items-start gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full mt-1 shrink-0" style="background-color: ${ev.pkt.hex}"></span>
+                            <div>
+                                <span class="font-bold text-slate-200 block">${ev.pkt.name}: ${ev.text}</span>
+                                <span class="text-[11px] text-slate-400 block">${ev.detail}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            feedContainer.innerHTML = feedHtml;
+        }
+
+        function onSliderInput(val) {
+            currentTime = parseFloat(val);
+            renderSVG();
+            updateStatusFeed();
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const btnPlay = document.getElementById('btn-play');
+            const iconPlay = document.getElementById('icon-play');
+            const iconPause = document.getElementById('icon-pause');
+
+            if (isPlaying) {
+                iconPlay.classList.add('hidden');
+                iconPause.classList.remove('hidden');
+                btnPlay.classList.replace('bg-blue-600', 'bg-amber-600');
+                btnPlay.classList.replace('hover:bg-blue-500', 'hover:bg-amber-500');
+                
+                if (currentTime >= MAX_TIME) currentTime = 0;
+                lastTimestamp = performance.now();
+                animationFrameId = requestAnimationFrame(stepAnimation);
+            } else {
+                iconPlay.classList.remove('hidden');
+                iconPause.classList.add('hidden');
+                btnPlay.classList.replace('bg-amber-600', 'bg-blue-600');
+                btnPlay.classList.replace('hover:bg-amber-500', 'hover:bg-blue-500');
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            }
+        }
+
+        let lastTimestamp = 0;
+        function stepAnimation(timestamp) {
+            if (!isPlaying) return;
+            const delta = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            // Advance 2.5 ms per real-time second
+            currentTime += delta * 3.5;
+
+            if (currentTime >= MAX_TIME) {
+                currentTime = MAX_TIME;
+                togglePlay();
+            }
+
+            document.getElementById('time-range').value = currentTime;
+            renderSVG();
+            updateStatusFeed();
+
+            if (isPlaying) {
+                animationFrameId = requestAnimationFrame(stepAnimation);
+            }
+        }
+
+        function resetSim() {
+            if (isPlaying) togglePlay();
+            currentTime = 0;
+            document.getElementById('time-range').value = 0;
+            renderSVG();
+            updateStatusFeed();
+        }
+
+        function selectPacket(pktId) {
+            selectedPacketFilter = pktId;
+
+            // Highlight buttons
+            ['all', 1, 2, 3, 4].forEach(id => {
+                const btn = document.getElementById(`btn-${id === 'all' ? 'all' : 'p' + id}`);
+                if (btn) {
+                    if (id === pktId) {
+                        btn.classList.add('ring-2', 'ring-white', 'scale-105');
+                    } else {
+                        btn.classList.remove('ring-2', 'ring-white', 'scale-105');
+                    }
+                }
+            });
+
+            renderSVG();
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            renderSVG();
+            updateStatusFeed();
+            selectPacket('all');
+        };
+    </script>
+</body>
+</html>
