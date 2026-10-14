@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pràctica 3 · Mesures en contínua · Guia interactiva</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+  body{background:#0f172a;color:#f1f5f9;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0}
+  .card{background:linear-gradient(180deg,#1e293b,#131c31);border:1px solid #334155;border-radius:14px;padding:18px;box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px rgba(56,189,248,.07)}
+  .card h3{font-size:1.05rem;font-weight:700;color:#fbbf24;margin:0 0 10px}
+  .card h4{font-size:.9rem;font-weight:700;color:#38bdf8;margin:12px 0 4px}
+  .card p,.card li{font-size:.92rem;line-height:1.55;color:#cbd5e1}
+  .card ul,.card ol{padding-left:1.2rem;margin:6px 0}
+  .card ul{list-style:disc}.card ol{list-style:decimal}
+  .tab{padding:10px 16px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-weight:600;cursor:pointer;transition:.15s}
+  .tab:hover{border-color:#38bdf8}
+  .tab.on{background:#f59e0b;color:#0f172a;border-color:#fbbf24;box-shadow:0 0 18px rgba(245,158,11,.45)}
+  .panel{display:none}.panel.on{display:block}
+  .formula{background:#0b1224;border-left:3px solid #f59e0b;border-radius:8px;padding:10px 14px;margin:8px 0;font-family:"Cambria Math",Cambria,Georgia,serif;font-size:1.08rem;color:#f8fafc;overflow-x:auto}
+  .frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 4px}
+  .frac>span:first-child{border-bottom:1px solid #f8fafc;padding:0 6px}
+  .frac>span:last-child{padding:0 6px}
+  .stat{background:#0b1224;border:1px solid #334155;border-radius:10px;padding:8px 10px}
+  .stat .k{font-size:.72rem;color:#94a3b8}
+  .stat .v{font-size:1.05rem;font-weight:700;color:#34d399;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .stat.warn .v{color:#fb7185}
+  .btn,.opt{padding:7px 12px;border-radius:9px;border:1px solid #475569;background:#0b1224;color:#e2e8f0;font-size:.85rem;font-weight:600;cursor:pointer}
+  .btn:hover,.opt:hover{border-color:#38bdf8}
+  .opt.on{background:#0ea5e9;color:#04121f;border-color:#7dd3fc}
+  .btn.go{background:#10b981;color:#04130d;border-color:#6ee7b7}
+  input[type=range]{width:100%;accent-color:#f59e0b}
+  canvas{width:100%;height:320px;display:block;border-radius:10px;border:1px solid #334155}
+  pre.memo{white-space:pre-wrap;word-break:break-word;background:#0b1224;border:1px solid #065f46;border-radius:10px;padding:14px;font-size:.86rem;line-height:1.55;color:#d1fae5;font-family:ui-monospace,Menlo,Consolas,monospace;margin:0}
+  table.dt{width:100%;border-collapse:collapse;font-size:.85rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+  table.dt th{color:#94a3b8;text-align:right;padding:4px 8px;border-bottom:1px solid #334155}
+  table.dt td{text-align:right;padding:4px 8px;border-bottom:1px solid #1e293b;color:#e2e8f0}
+  .note{background:#3b1d0a;border:1px solid #b45309;border-radius:10px;padding:10px 12px;font-size:.88rem;color:#fde68a}
+  .bar{height:14px;border-radius:7px;background:#1e293b;overflow:hidden}
+  .bar>div{height:100%;border-radius:7px}
+  svg text{font-family:system-ui,sans-serif}
+</style>
+</head>
+<body>
+<div class="max-w-7xl mx-auto px-4 py-6">
+
+  <header class="mb-5">
+    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-100">Pràctica 3 · Mesures en contínua</h1>
+    <p class="text-sky-300 mt-1">Guia interactiva i simulador de laboratori · Qüestions 1 a 4</p>
+    <p class="text-slate-400 text-sm mt-1">Autor: Adam El Bouchaibi Charrout</p>
+  </header>
+
+  <nav class="flex flex-wrap gap-2 mb-5" id="tabs">
+    <button class="tab on" data-t="1">Qüestió 1 · I(V) d'una resistència</button>
+    <button class="tab" data-t="2">Qüestió 2 · Divisor amb potenciòmetre</button>
+    <button class="tab" data-t="3">Qüestió 3 · Intrusisme del voltímetre</button>
+    <button class="tab" data-t="4">Qüestió 4 · Amperímetre i mesura indirecta</button>
+  </nav>
+
+  <!-- ================= Q1 ================= -->
+  <section class="panel on" id="p1" data-q="1">
+    <div class="card">
+      <h3>Teoria · Llei d'Ohm i recta I(V)</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <p>Per a una resistència ideal, la corrent és proporcional a la tensió aplicada:</p>
+          <div class="formula">I = <span class="frac"><span>V</span><span>R</span></span> &nbsp;⇒&nbsp; I = m·V, &nbsp; m = <span class="frac"><span>1</span><span>R</span></span> &nbsp;⇒&nbsp; R = 1/m</div>
+          <p>La recta I(V) passa per l'origen. L'invers del pendent és la resistència.</p>
+          <h4>Intrusisme de l'amperímetre</h4>
+          <p>L'amperímetre s'insereix en sèrie i afegeix la seva resistència interna R<sub>A</sub> ≈ 1,5 Ω. Amb la resistència de contacte R<sub>c</sub> del protoboard:</p>
+          <div class="formula">I* = <span class="frac"><span>V</span><span>R + R<sub>A</sub> + R<sub>c</sub></span></span> &nbsp;⇒&nbsp; 1/m* = R + R<sub>A</sub> + R<sub>c</sub></div>
+        </div>
+        <div>
+          <h4>Passos al laboratori</h4>
+          <ol>
+            <li>Munta el circuit de la figura 3.8 amb R = 470 Ω i límit de la font a 100 mA.</li>
+            <li>Ajusta VG a 8, 6, 4, 2 i 0 V i anota la corrent de l'amperímetre.</li>
+            <li>Al full de càlcul: gràfic de dispersió XY, línia de tendència lineal, mostra l'equació.</li>
+            <li>Si I està en mA, el pendent surt en mA/V (mS) i 1/m surt en kΩ: multiplica per 1000 per tenir Ω.</li>
+            <li>Treu la resistència i mesura-la amb l'ohmímetre.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-5 mt-5">
+      <div class="card lg:col-span-3">
+        <h3>Protoboard · muntatge en sèrie</h3>
+        <div id="svg1"></div>
+        <p class="mt-2 text-xs">Vermell = +, negre i blau = GND, groc i verd = instruments, ocre = columnes (nodes) implicades. Camí: Font (+) → columna A → mA → COM → columna B (R = 470 Ω) → GND.</p>
+      </div>
+      <div class="card lg:col-span-2">
+        <h3>Simulador</h3>
+        <div id="c1"></div>
+        <label class="flex items-center gap-2 text-sm mb-3"><input type="checkbox" id="q1nz"> Afegir soroll de lectura a la taula</label>
+        <div class="grid grid-cols-2 gap-2" id="r1"></div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-5 mt-5">
+      <div class="card"><h3>Gràfica I(V)</h3><canvas id="cv1"></canvas></div>
+      <div class="card"><h3>Taula de dades i ajust lineal</h3><div id="t1"></div><div id="fit1" class="mt-3"></div></div>
+    </div>
+
+    <div class="card mt-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h3 class="!mb-0">Memòria · Qüestió 1</h3>
+        <button class="btn go" data-copy="memo1">Copia al porta-retalls</button>
+      </div>
+      <p class="text-xs mb-2">Les dades surten del simulador. Substitueix-les pels valors que has mesurat al laboratori.</p>
+      <pre class="memo" id="memo1"></pre>
+    </div>
+  </section>
+
+  <!-- ================= Q2 ================= -->
+  <section class="panel" id="p2" data-q="2">
+    <div class="card">
+      <h3>Teoria · Potenciòmetre i efecte de càrrega</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <p>El potenciòmetre té tres terminals: dos extrems fixos (1 i 3) i un cursor mòbil (2). El cursor divideix R<sub>1</sub> = 500 Ω en dues parts:</p>
+          <div class="formula">R<sub>1a</sub> = (1 − x)·R<sub>1</sub> (superior) &nbsp; · &nbsp; R<sub>1b</sub> = x·R<sub>1</sub> (inferior), &nbsp; 0 ≤ x ≤ 1</div>
+          <p>Sense càrrega, V<sub>o</sub> = x·V<sub>G</sub>. Amb R<sub>2</sub> connectada al cursor, R<sub>2</sub> queda en paral·lel amb R<sub>1b</sub>:</p>
+          <div class="formula">V<sub>o</sub> = V<sub>G</sub> · <span class="frac"><span>R<sub>1b</sub> ∥ R<sub>2</sub></span><span>R<sub>1a</sub> + (R<sub>1b</sub> ∥ R<sub>2</sub>)</span></span></div>
+        </div>
+        <div>
+          <div class="note"><b>Correcció important.</b> La resistència de càrrega és R<sub>2</sub> = <b>47 kΩ</b> (no 47 Ω). Quan es canvia a 330 Ω la tensió <b>baixa</b> de 3,50 V a ≈ 2,54 V, no puja. R<sub>1b</sub> ∥ R<sub>2</sub> és més petita que abans i el terme inferior del divisor perd pes.</div>
+          <h4>Procediment</h4>
+          <ol>
+            <li>VG = 7 V, límit 100 mA. Comprova ≈ 500 Ω entre extrems del potenciòmetre.</li>
+            <li>Amb R<sub>2</sub> = 47 kΩ, mou el cursor fins a V = 3,5 V.</li>
+            <li>Apaga la font, canvia R<sub>2</sub> per 330 Ω, engega i mesura sense tocar el cursor.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-5 mt-5">
+      <div class="card lg:col-span-3">
+        <h3>Protoboard · divisor amb potenciòmetre</h3>
+        <div id="svg2"></div>
+        <p class="mt-2 text-xs">Pota 1 → +7 V, pota 3 → GND, cursor (pota 2) → R<sub>2</sub> i voltímetre. El voltímetre i R<sub>2</sub> estan en paral·lel (blau cel).</p>
+      </div>
+      <div class="card lg:col-span-2">
+        <h3>Simulador</h3>
+        <div class="mb-3">
+          <div class="text-sm mb-1">Resistència de càrrega R<sub>2</sub></div>
+          <div class="flex flex-wrap gap-2" id="o2">
+            <button class="opt on" data-v="47000">47 kΩ</button>
+            <button class="opt" data-v="330">330 Ω</button>
+            <button class="opt" data-v="inf">Sense càrrega (∞)</button>
+          </div>
+        </div>
+        <div id="c2"></div>
+        <button class="btn go mb-3" id="cal2">Ajusta el cursor a 3,5 V amb 47 kΩ</button>
+        <div class="grid grid-cols-2 gap-2" id="r2"></div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-5 mt-5">
+      <div class="card"><h3>V<sub>o</sub> en funció de la posició del cursor</h3><canvas id="cv2"></canvas></div>
+      <div class="card"><h3>Comparació 47 kΩ i 330 Ω amb el cursor actual</h3><div id="t2"></div></div>
+    </div>
+
+    <div class="card mt-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h3 class="!mb-0">Memòria · Qüestió 2</h3>
+        <button class="btn go" data-copy="memo2">Copia al porta-retalls</button>
+      </div>
+      <p class="text-xs mb-2">El valor de 330 Ω és teòric amb el cursor ajustat a 3,5 V. Si has mesurat una altra cosa al laboratori, escriu el teu valor.</p>
+      <pre class="memo" id="memo2"></pre>
+    </div>
+  </section>
+
+  <!-- ================= Q3 ================= -->
+  <section class="panel" id="p3" data-q="3">
+    <div class="card">
+      <h3>Teoria · Voltímetre real en un divisor d'alta impedància</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <p>El voltímetre RS PRO IDM-8341 té una resistència d'entrada R<sub>V</sub> = 10 MΩ. Connectat entre B i C, queda en paral·lel amb R<sub>2</sub>:</p>
+          <div class="formula">R<sub>eq</sub> = R<sub>2</sub> ∥ R<sub>V</sub> = <span class="frac"><span>R<sub>2</sub>·R<sub>V</sub></span><span>R<sub>2</sub> + R<sub>V</sub></span></span> = 10 MΩ ∥ 10 MΩ = 5 MΩ</div>
+          <div class="formula">V<sub>BC</sub> = V<sub>G</sub> · <span class="frac"><span>R<sub>eq</sub></span><span>R<sub>1</sub> + R<sub>eq</sub></span></span> = 7 · <span class="frac"><span>5</span><span>10 + 5</span></span> = 2,33 V</div>
+        </div>
+        <div>
+          <p>El valor sense intrusisme (voltímetre ideal) és V = 7 · 10/(10 + 10) = 3,50 V. L'error relatiu és</p>
+          <div class="formula">ε = <span class="frac"><span>2,33 − 3,50</span><span>3,50</span></span> = −33,33 %</div>
+          <p>L'error és petit només si R<sub>V</sub> ≫ R<sub>2</sub>. Prova al simulador amb R = 10 kΩ per veure'l desaparèixer.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-5 mt-5">
+      <div class="card lg:col-span-3">
+        <h3>Protoboard · divisor de 10 MΩ + 10 MΩ</h3>
+        <div id="svg3"></div>
+        <p class="mt-2 text-xs">Franges de 10 MΩ: marró, negre, blau, or. El voltímetre (R<sub>V</sub> a l'interior) queda en paral·lel amb R<sub>2</sub>.</p>
+      </div>
+      <div class="card lg:col-span-2">
+        <h3>Simulador</h3>
+        <div class="mb-3">
+          <div class="text-sm mb-1">R<sub>1</sub> = R<sub>2</sub> =</div>
+          <div class="flex flex-wrap gap-2" id="o3">
+            <button class="opt on" data-v="10000000">10 MΩ</button>
+            <button class="opt" data-v="1000000">1 MΩ</button>
+            <button class="opt" data-v="100000">100 kΩ</button>
+            <button class="opt" data-v="10000">10 kΩ</button>
+          </div>
+        </div>
+        <div id="c3"></div>
+        <div class="grid grid-cols-2 gap-2" id="r3"></div>
+        <div class="mt-3">
+          <div class="text-xs text-slate-400 mb-1">Voltímetre ideal</div>
+          <div class="bar"><div id="b3a" style="background:#38bdf8"></div></div>
+          <div class="text-xs text-slate-400 mt-2 mb-1">Voltímetre real</div>
+          <div class="bar"><div id="b3b" style="background:#f59e0b"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-5"><h3>Error relatiu en funció de R<sub>V</sub></h3><canvas id="cv3"></canvas></div>
+
+    <div class="card mt-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h3 class="!mb-0">Memòria · Qüestió 3</h3>
+        <button class="btn go" data-copy="memo3">Copia al porta-retalls</button>
+      </div>
+      <pre class="memo" id="memo3"></pre>
+    </div>
+  </section>
+
+  <!-- ================= Q4 ================= -->
+  <section class="panel" id="p4" data-q="4">
+    <div class="card">
+      <h3>Teoria · Amperímetre en sèrie o mesura indirecta</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <p>Malla amb V<sub>G</sub> = 10 V, R<sub>1</sub> = 220 Ω i R<sub>2</sub> = 100 Ω. Amb amperímetre ideal:</p>
+          <div class="formula">I = <span class="frac"><span>10 V</span><span>220 + 100 Ω</span></span> = 31,25 mA &nbsp;·&nbsp; V<sub>R2</sub> = I·R<sub>2</sub> = 3,125 V</div>
+          <p>En obrir la malla per inserir l'amperímetre s'afegeix R<sub>A</sub> en sèrie:</p>
+          <div class="formula">I* = <span class="frac"><span>V<sub>G</sub></span><span>R<sub>1</sub> + R<sub>2</sub> + R<sub>A</sub></span></span> &lt; I</div>
+        </div>
+        <div>
+          <h4>Mesura indirecta</h4>
+          <p>No s'obre el circuit. Es mesura només la tensió a R<sub>2</sub> i s'aplica la llei d'Ohm:</p>
+          <div class="formula">I = <span class="frac"><span>V<sub>R2</sub></span><span>R<sub>2</sub></span></span></div>
+          <p>El voltímetre (10 MΩ) en paral·lel amb 100 Ω gairebé no altera el circuit, de manera que l'error és molt menor que amb l'amperímetre.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-5 mt-5">
+      <div class="lg:col-span-3 space-y-5">
+        <div class="card">
+          <h3>Mesura directa · amperímetre en sèrie (circuit obert)</h3>
+          <div id="svg4a"></div>
+        </div>
+        <div class="card">
+          <h3>Mesura indirecta · voltímetre en paral·lel amb R<sub>2</sub></h3>
+          <div id="svg4b"></div>
+        </div>
+      </div>
+      <div class="card lg:col-span-2 self-start">
+        <h3>Simulador</h3>
+        <div id="c4"></div>
+        <div class="flex flex-wrap gap-2 mb-3" id="o4">
+          <button class="opt on" data-v="1.5">1,5 Ω</button>
+          <button class="opt" data-v="10">10 Ω</button>
+          <button class="opt" data-v="50">50 Ω</button>
+          <button class="opt" data-v="100">100 Ω</button>
+        </div>
+        <div class="grid grid-cols-2 gap-2" id="r4"></div>
+      </div>
+    </div>
+
+    <div class="card mt-5"><h3>Error relatiu de la mesura de corrent en funció de R<sub>A</sub></h3><canvas id="cv4"></canvas></div>
+
+    <div class="card mt-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h3 class="!mb-0">Memòria · Qüestió 4</h3>
+        <button class="btn go" data-copy="memo4">Copia al porta-retalls</button>
+      </div>
+      <p class="text-xs mb-2">El valor de la mesura directa depèn de R<sub>A</sub>. Ajusta el control o escriu la lectura real del teu amperímetre.</p>
+      <pre class="memo" id="memo4"></pre>
+    </div>
+  </section>
+
+  <footer class="text-xs text-slate-500 mt-8 text-center">Fórmules en HTML i Unicode, sense LaTeX ni biblioteques externes. Només Tailwind es carrega per CDN.</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const f=(x,d=2)=>Number(x).toFixed(d);
+const c=(x,d=2)=>Number(x).toFixed(d).replace('.',',').replace('-','−');
+const par=(a,b)=>{if(a===0||b===0)return 0;if(!isFinite(b))return a;if(!isFinite(a))return b;return a*b/(a+b)};
+const trim=x=>parseFloat(Number(x).toPrecision(4)).toString();
+function fR(R){if(!isFinite(R))return '∞';if(R>=1e6)return trim(R/1e6)+' MΩ';if(R>=1e3)return trim(R/1e3)+' kΩ';return trim(R)+' Ω'}
+const cR=R=>fR(R).replace('.',',');
+
+/* ---------- controls ---------- */
+function sl(id,label,min,max,step,val,unit,d){
+  return `<label class="block mb-3"><div class="flex justify-between text-sm"><span>${label}</span><b id="${id}o" class="text-amber-300">${Number(val).toFixed(d)} ${unit}</b></div><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}" data-u="${unit}" data-d="${d}"></label>`;
+}
+function stat(id,k,warn){return `<div class="stat${warn?' warn':''}"><div class="k">${k}</div><div class="v" id="${id}">–</div></div>`}
+
+/* ---------- canvas plot ---------- */
+function plot(cv,o){
+  const r=window.devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;
+  if(!w)return;
+  cv.width=w*r;cv.height=h*r;
+  const g=cv.getContext('2d');g.setTransform(r,0,0,r,0,0);
+  const L=62,R=18,T=18,B=48,pw=w-L-R,ph=h-T-B;
+  const lg=Math.log10;
+  const X=o.xlog?x=>L+(lg(x)-lg(o.xmin))/(lg(o.xmax)-lg(o.xmin))*pw:x=>L+(x-o.xmin)/(o.xmax-o.xmin)*pw;
+  const Y=y=>T+ph-(y-o.ymin)/(o.ymax-o.ymin)*ph;
+  g.fillStyle='#0b1224';g.fillRect(0,0,w,h);
+  g.font='12px system-ui,sans-serif';g.lineWidth=1;
+  o.xticks.forEach(v=>{const x=X(v);g.strokeStyle='#1e293b';g.beginPath();g.moveTo(x,T);g.lineTo(x,T+ph);g.stroke();g.fillStyle='#94a3b8';g.textAlign='center';g.fillText(o.xf?o.xf(v):v,x,T+ph+16)});
+  o.yticks.forEach(v=>{const y=Y(v);g.strokeStyle='#1e293b';g.beginPath();g.moveTo(L,y);g.lineTo(L+pw,y);g.stroke();g.fillStyle='#94a3b8';g.textAlign='right';g.fillText(o.yf?o.yf(v):v,L-6,y+4)});
+  g.strokeStyle='#64748b';g.strokeRect(L,T,pw,ph);
+  g.fillStyle='#cbd5e1';g.textAlign='center';g.fillText(o.xl,L+pw/2,h-8);
+  g.save();g.translate(14,T+ph/2);g.rotate(-Math.PI/2);g.fillText(o.yl,0,0);g.restore();
+  g.save();g.beginPath();g.rect(L,T,pw,ph);g.clip();
+  (o.lines||[]).forEach(l=>{g.strokeStyle=l.c;g.lineWidth=l.w||2.2;g.setLineDash(l.d||[]);g.beginPath();l.p.forEach((q,i)=>{const x=X(q[0]),y=Y(q[1]);i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()});
+  g.setLineDash([]);
+  g.restore();
+  (o.dots||[]).forEach(d=>{g.beginPath();g.arc(X(d.x),Y(d.y),d.r,0,7);if(d.ring){g.strokeStyle=d.c;g.lineWidth=2.5;g.stroke()}else{g.fillStyle=d.c;g.fill()}});
+  let ly=T+14;
+  (o.lines||[]).forEach(l=>{if(!l.lab)return;g.strokeStyle=l.c;g.lineWidth=3;g.setLineDash(l.d||[]);g.beginPath();g.moveTo(L+10,ly-4);g.lineTo(L+34,ly-4);g.stroke();g.setLineDash([]);g.fillStyle='#e2e8f0';g.textAlign='left';g.fillText(l.lab,L+40,ly);ly+=16});
+}
+
+/* ---------- breadboard drawing ---------- */
+const P=30,X0=60,OY=125,NC=24;
+const hx=n=>X0+(n-1)*P;
+const RY={J:OY+60,I:OY+78,H:OY+96,G:OY+114,F:OY+132,E:OY+172,D:OY+190,C:OY+208,B:OY+226,A:OY+244};
+const RPY=OY+12,RNY=OY+28,BPY=OY+278,BNY=OY+294;
+const pt=(n,r)=>[hx(n),RY[r]];
+const rp=n=>[hx(n),RPY],rn=n=>[hx(n),RNY];
+const SP=[75,101],SN=[155,101],TM=[390,101],TC=[460,101],TV=[530,101];
+const WC={red:['#ef4444','#7f1d1d'],blue:['#3b82f6','#1e3a8a'],black:['#111827','#94a3b8'],yellow:['#eab308','#713f12'],green:['#22c55e','#14532d'],orange:['#f97316','#7c2d12']};
+const BC=['#111111','#7b4a1d','#dc2626','#f97316','#facc15','#16a34a','#2563eb','#8b5cf6','#9ca3af','#f3f4f6'];
+function bands(R){const e=Math.floor(Math.log10(R))-1;const d=Math.round(R/Math.pow(10,e));return [BC[Math.floor(d/10)],BC[d%10],BC[e]]}
+
+function boardBase(){
+  let s=`<rect x="15" y="${OY-6}" width="780" height="326" rx="12" fill="#e9e6da" stroke="#a8a290" stroke-width="2"/>`;
+  s+=`<rect x="25" y="${RY.F+14}" width="760" height="${RY.E-RY.F-28}" rx="4" fill="#cfcbbb"/>`;
+  [[RPY,'#dc2626',-9],[RNY,'#2563eb',9],[BPY,'#dc2626',-9],[BNY,'#2563eb',9]].forEach(a=>{
+    s+=`<line x1="${hx(1)-12}" y1="${a[0]+a[2]}" x2="${hx(NC)+12}" y2="${a[0]+a[2]}" stroke="${a[1]}" stroke-width="1.6"/>`});
+  [[RPY,'+','#dc2626'],[RNY,'−','#2563eb'],[BPY,'+','#dc2626'],[BNY,'−','#2563eb']].forEach(a=>{
+    s+=`<text x="${X0-32}" y="${a[0]+4}" font-size="13" font-weight="700" fill="${a[2]}" text-anchor="middle">${a[1]}</text>`;
+    s+=`<text x="${hx(NC)+32}" y="${a[0]+4}" font-size="13" font-weight="700" fill="${a[2]}" text-anchor="middle">${a[1]}</text>`;
+    for(let n=1;n<=NC;n++){if(n===7||n===13||n===19)continue;s+=`<circle cx="${hx(n)}" cy="${a[0]}" r="3.6" fill="#3f3f46"/>`}});
+  Object.keys(RY).forEach(r=>{
+    s+=`<text x="${X0-30}" y="${RY[r]+4}" font-size="11" font-weight="700" fill="#6b7280" text-anchor="middle">${r}</text>`;
+    s+=`<text x="${hx(NC)+30}" y="${RY[r]+4}" font-size="11" font-weight="700" fill="#6b7280" text-anchor="middle">${r}</text>`;
+    for(let n=1;n<=NC;n++)s+=`<circle cx="${hx(n)}" cy="${RY[r]}" r="3.6" fill="#3f3f46"/>`});
+  for(let n=1;n<=NC;n++){
+    s+=`<text x="${hx(n)}" y="${OY+46}" font-size="9" fill="#6b7280" text-anchor="middle">${n}</text>`;
+    s+=`<text x="${hx(n)}" y="${OY+266}" font-size="9" fill="#6b7280" text-anchor="middle">${n}</text>`}
+  return s;
+}
+function hl(n,half,col){
+  const y1=half==='U'?RY.J-9:RY.E-9,y2=half==='U'?RY.F+9:RY.A+9;
+  return `<rect x="${hx(n)-9}" y="${y1}" width="18" height="${y2-y1}" rx="6" fill="${col}" opacity=".38"/>`;
+}
+function tag(n,row,txt,col){return `<text x="${hx(n)}" y="${RY[row]}" font-size="10.5" font-weight="700" fill="${col}" text-anchor="middle">${txt}</text>`}
+function banner(txt,col){return `<text x="405" y="${RY.B}" font-size="13" font-weight="700" fill="${col}" text-anchor="middle">${txt}</text>`}
+function wire(a,b,k,o={}){
+  const m=WC[k][0],d=WC[k][1];let p;
+  if(o.arc){p=`M${a[0]},${a[1]} C${a[0]},${a[1]-o.arc} ${b[0]},${b[1]-o.arc} ${b[0]},${b[1]}`}
+  else{const ym=(a[1]+b[1])/2;p=`M${a[0]},${a[1]} C${a[0]},${ym} ${b[0]},${ym} ${b[0]},${b[1]}`}
+  const da=o.ghost?' stroke-dasharray="7 6"':'';
+  return `<g${o.ghost?' opacity=".6"':''}><path d="${p}" fill="none" stroke="${d}" stroke-width="7" stroke-linecap="round"${da}/><path d="${p}" fill="none" stroke="${m}" stroke-width="4" stroke-linecap="round"${da}/><circle cx="${a[0]}" cy="${a[1]}" r="4.5" fill="${m}" stroke="${d}"/><circle cx="${b[0]}" cy="${b[1]}" r="4.5" fill="${m}" stroke="${d}"/></g>`;
+}
+function res(c1,c2,row,R,label,below){
+  const y=RY[row],x1=hx(c1),x2=hx(c2),xm=(x1+x2)/2,x0=xm-32,b=bands(R);
+  let s=`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>`;
+  s+=`<circle cx="${x1}" cy="${y}" r="4" fill="#6b7280"/><circle cx="${x2}" cy="${y}" r="4" fill="#6b7280"/>`;
+  s+=`<rect x="${x0}" y="${y-8}" width="64" height="16" rx="8" fill="#d8b98a" stroke="#8a6a3a"/>`;
+  [14,24,34].forEach((o,i)=>{s+=`<rect x="${x0+o}" y="${y-8}" width="5" height="16" fill="${b[i]}"/>`});
+  s+=`<rect x="${x0+50}" y="${y-8}" width="5" height="16" fill="#cda434"/>`;
+  s+=`<text x="${xm}" y="${below?y+27:y-13}" font-size="11" font-weight="700" fill="#111827" text-anchor="middle">${label}</text>`;
+  return s;
+}
+function source(l1,l2){
+  return `<rect x="15" y="8" width="200" height="105" rx="10" fill="#1f2937" stroke="#64748b" stroke-width="2"/>
+<text x="115" y="26" font-size="12" font-weight="700" fill="#cbd5e1" text-anchor="middle">FONT D'ALIMENTACIÓ</text>
+<rect x="30" y="34" width="170" height="30" rx="4" fill="#052e16" stroke="#166534"/>
+<text x="115" y="56" font-size="18" font-family="monospace" fill="#4ade80" text-anchor="middle">${l1}</text>
+<text x="115" y="77" font-size="10" fill="#94a3b8" text-anchor="middle">${l2}</text>
+<circle cx="75" cy="101" r="7" fill="#0f172a" stroke="#ef4444" stroke-width="3"/><circle cx="155" cy="101" r="7" fill="#0f172a" stroke="#cbd5e1" stroke-width="3"/>
+<text x="75" y="90" font-size="12" font-weight="700" fill="#ef4444" text-anchor="middle">+</text><text x="155" y="90" font-size="12" font-weight="700" fill="#cbd5e1" text-anchor="middle">−</text>`;
+}
+function dmm(reading,mode,sub){
+  const act=n=>n===mode||n==='COM';
+  const t=(x,lab,on,col)=>`<circle cx="${x}" cy="101" r="7" fill="#0f172a" stroke="${on?col:'#475569'}" stroke-width="3"/><text x="${x}" y="90" font-size="10" font-weight="700" fill="${on?col:'#64748b'}" text-anchor="middle">${lab}</text>`;
+  return `<rect x="330" y="8" width="260" height="105" rx="10" fill="#1f2937" stroke="#64748b" stroke-width="2"/>
+<text x="460" y="24" font-size="12" font-weight="700" fill="#cbd5e1" text-anchor="middle">MULTÍMETRE DIGITAL</text>
+<rect x="345" y="30" width="230" height="32" rx="4" fill="#bef264" stroke="#65a30d"/>
+<text x="560" y="43" font-size="10" font-weight="700" fill="#365314" text-anchor="end">${mode==='mA'?'DC mA':'DC V'}</text>
+<text x="460" y="55" font-size="20" font-family="monospace" font-weight="700" fill="#1a2e05" text-anchor="middle">${reading}</text>
+<text x="460" y="76" font-size="10" fill="#94a3b8" text-anchor="middle">${sub||''}</text>
+${t(390,'mA',act('mA'),'#eab308')}${t(460,'COM',true,'#22c55e')}${t(530,'V/Ω',act('V'),'#eab308')}`;
+}
+function pot(x){
+  const yt=OY+66,yb=OY+122,x1=hx(11)-6,x2=hx(17)+6,cx=hx(14),cy=(yt+yb)/2-2,ang=-135+270*x;
+  let s='';
+  [12,14,16].forEach(n=>{s+=`<line x1="${hx(n)}" y1="${yb}" x2="${hx(n)}" y2="${RY.F}" stroke="#9ca3af" stroke-width="3"/>`});
+  s+=`<rect x="${x1}" y="${yt}" width="${x2-x1}" height="${yb-yt}" rx="8" fill="#1d4ed8" stroke="#1e3a8a" stroke-width="2"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="16" fill="#e5e7eb" stroke="#6b7280" stroke-width="2"/>`;
+  s+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-13}" stroke="#111827" stroke-width="3" stroke-linecap="round" transform="rotate(${ang} ${cx} ${cy})"/>`;
+  s+=`<text x="${cx}" y="${yt+12}" font-size="9.5" font-weight="700" fill="#dbeafe" text-anchor="middle">POTENCIÒMETRE 500 Ω</text>`;
+  [[12,'1'],[14,'2'],[16,'3']].forEach(a=>{s+=`<text x="${hx(a[0])}" y="${yb-5}" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">${a[1]}</text>`});
+  return s;
+}
+const wrap=s=>`<svg viewBox="0 0 810 ${OY+330}" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+
+/* ---------- Q1 ---------- */
+function linfit(p){
+  const n=p.length;let sx=0,sy=0,sxx=0,sxy=0,syy=0;
+  p.forEach(q=>{sx+=q[0];sy+=q[1];sxx+=q[0]*q[0];sxy+=q[0]*q[1];syy+=q[1]*q[1]});
+  const m=(n*sxy-sx*sy)/(n*sxx-sx*sx),b=(sy-m*sx)/n;
+  const r2=Math.pow(n*sxy-sx*sy,2)/((n*sxx-sx*sx)*(n*syy-sy*sy));
+  return {m,b,r2};
+}
+function render1(){
+  const V=+$('q1v').value,tol=+$('q1tol').value,RA=+$('q1ra').value,Rc=+$('q1rc').value,nz=$('q1nz').checked;
+  const Rr=470*(1+tol/100),Rt=Rr+RA+Rc,I=V/Rt*1000;
+  const volts=[0,2,4,6,8],nv=[0,0.02,-0.03,0.01,-0.02];
+  const rows=volts.map((v,i)=>({v,th:v/470*1000,me:Math.max(0,Math.round((v/Rt*1000+(nz?nv[i]:0))*100)/100)}));
+  const fit=linfit(rows.map(r=>[r.v,r.me])),inv=1000/fit.m;
+  const dR=inv-Rr,dP=dR/Rr*100;
+
+  $('svg1').innerHTML=wrap(
+    dmm(f(I,2)+' mA','mA','sèrie amb la resistència')+source(f(V,2)+' V','límit de corrent = 100 mA')+boardBase()
+    +hl(9,'U','#f59e0b')+hl(14,'U','#f59e0b')+hl(20,'U','#f59e0b')
+    +res(14,20,'H',470,'R = 470 Ω')
+    +tag(9,'D','COLUMNA A','#b45309')+tag(9,'C','font (+) i mA','#b45309')
+    +tag(14,'D','COLUMNA B','#b45309')+tag(14,'C','COM i R','#b45309')
+    +tag(20,'D','GND','#1d4ed8')
+    +banner('SÈRIE: Font(+) → mA → COM → R = 470 Ω → GND','#92400e')
+    +wire(rp(9),pt(9,'J'),'red')+wire(rn(20),pt(20,'J'),'blue')
+    +wire(SP,rp(2),'red')+wire(SN,rn(3),'black')
+    +wire(TM,pt(9,'I'),'yellow')+wire(TC,pt(14,'J'),'green'));
+
+  $('r1').innerHTML=''
+    +stat('s1a','Lectura amperímetre (mA)')+stat('s1b','Caiguda a R<sub>A</sub> (mV)')
+    +stat('s1c','R real (Ω)')+stat('s1d','Ohmímetre (Ω)')
+    +stat('s1e','R + R<sub>A</sub> + R<sub>c</sub> (Ω)')+stat('s1f','Potència a R (mW)');
+  $('s1a').textContent=f(I,2);$('s1b').textContent=f(I*RA,1);$('s1c').textContent=f(Rr,1);
+  $('s1d').textContent=f(Rr,1);$('s1e').textContent=f(Rt,1);$('s1f').textContent=f(I*I*Rr/1000,0);
+
+  plot($('cv1'),{xmin:0,xmax:8,ymin:0,ymax:20,xticks:volts,yticks:[0,5,10,15,20],xl:'Tensió VG (V)',yl:'Corrent I (mA)',
+    lines:[{p:[[0,0],[8,8/470*1000]],c:'#38bdf8',d:[6,5],lab:'Ideal I = V/470 Ω'},{p:[[0,fit.b],[8,fit.m*8+fit.b]],c:'#f59e0b',lab:'Tendència lineal de les mesures'}],
+    dots:rows.map(r=>({x:r.v,y:r.me,c:'#34d399',r:5})).concat([{x:V,y:I,c:'#ffffff',r:8,ring:true}])});
+
+  $('t1').innerHTML=`<table class="dt"><tr><th>VG (V)</th><th>I teòrica (mA)</th><th>I mesurada (mA)</th><th>Desv. (%)</th></tr>`
+    +rows.map(r=>`<tr><td>${f(r.v,1)}</td><td>${f(r.th,2)}</td><td>${f(r.me,2)}</td><td>${r.v?f((r.me-r.th)/r.th*100,2):'–'}</td></tr>`).join('')+`</table>`;
+  const sg=fit.b>=0?'+':'−';
+  $('fit1').innerHTML=`<div class="grid grid-cols-2 gap-2">`
+    +`<div class="stat"><div class="k">Equació (I en mA, V en V)</div><div class="v" style="font-size:.9rem">y = ${f(fit.m,4)}x ${sg} ${f(Math.abs(fit.b),4)}</div></div>`
+    +`<div class="stat"><div class="k">R²</div><div class="v">${f(fit.r2,5)}</div></div>`
+    +`<div class="stat"><div class="k">1/m (Ω)</div><div class="v">${f(inv,1)}</div></div>`
+    +`<div class="stat ${Math.abs(dR)>0.5?'warn':''}"><div class="k">1/m − ohmímetre</div><div class="v">${dR>=0?'+':''}${f(dR,1)} Ω (${f(dP,2)} %)</div></div></div>`;
+
+  const sgc=fit.b>=0?'+':'−';
+  $('memo1').textContent=
+`QÜESTIÓ 1. Característica I(V) d'una resistència (R = 470 Ω)
+Autor: Adam El Bouchaibi Charrout
+
+Mesures (circuit de la figura 3.8, límit de corrent de la font a 100 mA):
+${rows.map(r=>`  VG = ${c(r.v,1)} V  ->  I = ${c(r.me,2)} mA`).join('\n')}
+
+Corba de tendència lineal del full de càlcul (I en mA, V en V):
+  I = ${c(fit.m,4)}·V ${sgc} ${c(Math.abs(fit.b),4)}    (R² = ${c(fit.r2,5)})
+Pendent: m = ${c(fit.m,4)} mA/V = ${c(fit.m,4)} mS, per tant 1/m = ${c(inv,1)} Ω.
+Resistència mesurada amb l'ohmímetre: R = ${c(Rr,1)} Ω.
+
+Resposta:
+Segons la llei d'Ohm, I = V/R. La gràfica I(V) és una recta que passa per l'origen amb pendent m = 1/R, de manera que l'invers del pendent ha de ser el valor de la resistència. Hem obtingut 1/m = ${c(inv,1)} Ω, que ${Math.abs(dP)<5?'coincideix':'no coincideix'} amb el valor nominal de 470 Ω i amb el de l'ohmímetre (${c(Rr,1)} Ω) dins de la tolerància. La diferència és ${dR>=0?'+':'−'}${c(Math.abs(dR),1)} Ω (${c(dP,2)} %).
+
+Causes de la discrepància:
+1) Tolerància de la resistència: les resistències de carbó tenen una tolerància de ±5 % (franja daurada), de manera que el valor real pot diferir del nominal fins a ±23,5 Ω.
+2) Intrusisme de l'amperímetre: la seva resistència interna RA ≈ ${c(RA,1)} Ω queda en sèrie amb R i el circuit mesura I* = V/(R + RA), per tant 1/m = R + RA + Rc. Això fa que 1/m sigui sempre una mica més gran que R.
+3) Resistència de contacte dels cables i del protoboard (Rc ≈ ${c(Rc,1)} Ω).
+4) Resolució i error de lectura del multímetre i de la font (la tensió indicada no és exactament la real).
+5) Escalfament: P = V²/R = ${c(64/470*1000,0)} mW al màxim, inferior a la potència màxima de la resistència, de manera que el seu efecte és negligible.`;
+}
+
+/* ---------- Q2 ---------- */
+let S2=47000;
+const VG2=7,RP2=500;
+function vo2(x,R2){
+  const Rb=x*RP2,Ra=(1-x)*RP2,Rpar=R2===Infinity?Rb:par(Rb,R2);
+  return Ra+Rpar===0?0:VG2*Rpar/(Ra+Rpar);
+}
+function xcal(){let lo=0,hi=1;for(let i=0;i<60;i++){const m=(lo+hi)/2;if(vo2(m,47000)<3.5)lo=m;else hi=m}return (lo+hi)/2}
+function render2(){
+  const x=+$('q2x').value,R2=S2,Rb=x*RP2,Ra=(1-x)*RP2,Rpar=R2===Infinity?Rb:par(Rb,R2);
+  const Vo=vo2(x,R2),Vnl=x*VG2,Itot=Ra+Rpar?VG2/(Ra+Rpar)*1000:0;
+  const lab=R2===Infinity?'sense R2':'R2 = '+fR(R2);
+
+  $('svg2').innerHTML=wrap(
+    dmm(f(Vo,3)+' V','V','paral·lel amb '+(R2===Infinity?'(res)':'R2'))+source(f(VG2,2)+' V','límit de corrent = 100 mA')+boardBase()
+    +hl(12,'U','#f59e0b')+hl(16,'U','#3b82f6')+hl(14,'U','#38bdf8')+hl(21,'U','#38bdf8')
+    +pot(x)
+    +(R2===Infinity?'':res(21,24,'H',R2,'R2 = '+fR(R2)))
+    +tag(12,'D','1 · +7 V','#b45309')+tag(14,'D','2 · cursor','#0369a1')+tag(16,'D','3 · GND','#1d4ed8')
+    +tag(21,'D','V<tspan baseline-shift="sub" font-size="8">o</tspan>','#0369a1')
+    +banner('Voltímetre i '+(R2===Infinity?'(sense R2)':'R2')+' en PARAL·LEL amb R1b','#075985')
+    +wire(rp(12),pt(12,'J'),'red')+wire(rn(16),pt(16,'J'),'blue')
+    +wire(pt(14,'J'),pt(21,'J'),'orange',{arc:34})
+    +(R2===Infinity?'':wire(pt(24,'J'),rn(24),'blue'))
+    +wire(SP,rp(2),'red')+wire(SN,rn(3),'black')
+    +wire(TV,pt(21,'I'),'yellow')+wire(TC,rn(18),'green'));
+
+  $('r2').innerHTML=stat('s2a','R1a superior (Ω)')+stat('s2b','R1b inferior (Ω)')+stat('s2c','R1b ∥ R2 (Ω)')+stat('s2d','V<sub>o</sub> mesurada (V)')
+    +stat('s2e','V<sub>o</sub> sense càrrega x·V<sub>G</sub> (V)')+stat('s2f','Error de càrrega (V / %)',true)+stat('s2g','Corrent de la font (mA)')+stat('s2h','Posició del cursor x');
+  $('s2a').textContent=f(Ra,1);$('s2b').textContent=f(Rb,1);$('s2c').textContent=f(Rpar,2);$('s2d').textContent=f(Vo,3);
+  $('s2e').textContent=f(Vnl,3);$('s2f').textContent=f(Vo-Vnl,3)+' / '+f(Vnl?(Vo-Vnl)/Vnl*100:0,2);$('s2g').textContent=f(Itot,2);$('s2h').textContent=f(x,3);
+
+  const pts=R=>{const a=[];for(let i=0;i<=100;i++)a.push([i/100,vo2(i/100,R)]);return a};
+  plot($('cv2'),{xmin:0,xmax:1,ymin:0,ymax:7,xticks:[0,.25,.5,.75,1],yticks:[0,1,2,3,4,5,6,7],xl:'Posició del cursor x',yl:'Vo (V)',
+    lines:[{p:pts(Infinity),c:'#94a3b8',d:[6,5],lab:'Sense càrrega'},{p:pts(47000),c:'#34d399',lab:'R2 = 47 kΩ'},{p:pts(330),c:'#f59e0b',lab:'R2 = 330 Ω'}],
+    dots:[{x:x,y:Vo,c:'#ffffff',r:8,ring:true}]});
+
+  const v47=vo2(x,47000),v330=vo2(x,330);
+  $('t2').innerHTML=`<table class="dt"><tr><th>R2</th><th>R1b ∥ R2 (Ω)</th><th>V<sub>o</sub> (V)</th><th>Error (%)</th></tr>`
+    +[[47000,v47],[330,v330]].map(a=>`<tr><td>${fR(a[0])}</td><td>${f(par(Rb,a[0]),2)}</td><td>${f(a[1],3)}</td><td>${Vnl?f((a[1]-Vnl)/Vnl*100,2):'–'}</td></tr>`).join('')
+    +`</table><p class="mt-3 text-sm">Amb R2 = 330 Ω, R1b ∥ R2 és més petita que amb 47 kΩ. Per això la tensió baixa ${f(v47-v330,2)} V.</p>`;
+}
+function memo2(){
+  const x=xcal(),Rb=x*RP2,Ra=(1-x)*RP2,p47=par(Rb,47000),p330=par(Rb,330),v47=vo2(x,47000),v330=vo2(x,330),vnl=x*VG2;
+  $('memo2').textContent=
+`QÜESTIÓ 2. Divisor de tensió amb potenciòmetre (R1 = 500 Ω) i efecte de càrrega
+Autor: Adam El Bouchaibi Charrout
+
+Resultat de la mesura (VG = 7 V):
+  R2 = 47 kΩ, cursor ajustat per obtenir V = ${c(v47,2)} V.
+  R2 = 330 Ω, mateixa posició del cursor: V ≈ ${c(v330,2)} V.
+
+Justificació:
+El cursor del potenciòmetre divideix R1 en R1a = (1 − x)·R1 (part superior) i R1b = x·R1 (part inferior). La sortida es pren del cursor, de manera que R2 (i el voltímetre) queda en paral·lel amb R1b:
+  Vo = VG · (R1b ∥ R2) / (R1a + (R1b ∥ R2))
+Amb el cursor ajustat per tenir 3,5 V amb 47 kΩ, x ≈ ${c(x,3)}, és a dir R1a ≈ ${c(Ra,1)} Ω i R1b ≈ ${c(Rb,1)} Ω.
+  R2 = 47 kΩ: R1b ∥ R2 = ${c(p47,1)} Ω, Vo = 7 · ${c(p47,1)} / (${c(Ra,1)} + ${c(p47,1)}) = ${c(v47,2)} V
+  R2 = 330 Ω: R1b ∥ R2 = ${c(p330,1)} Ω, Vo = 7 · ${c(p330,1)} / (${c(Ra,1)} + ${c(p330,1)}) = ${c(v330,2)} V
+
+Efecte de càrrega:
+Sense càrrega, Vo = x·VG = ${c(vnl,2)} V. Amb 47 kΩ ≫ R1b l'efecte és gairebé nul (${c((v47-vnl)/vnl*100,2)} %) i la tensió continua sent ≈ 3,5 V. Amb 330 Ω, R2 és comparable a R1b = ${c(Rb,0)} Ω, el paral·lel baixa fins a ${c(p330,1)} Ω i la fracció R1b∥R2 / (R1a + R1b∥R2) disminueix. La tensió de sortida baixa de ${c(v47,2)} V a ${c(v330,2)} V (${c((v330-v47)/v47*100,1)} %). Una càrrega més petita (més corrent demanat) carrega més el divisor i fa caure la tensió de sortida. Per tenir un divisor amb poca variació cal R2 ≫ R1b.`;
+}
+
+/* ---------- Q3 ---------- */
+let S3=1e7;
+function render3(){
+  const VG=+$('q3vg').value,ideal=$('q3id').checked,t=+$('q3rv').value;
+  const Rv=ideal?Infinity:Math.pow(10,5+4*t/100),R=S3;
+  $('q3rv').disabled=ideal;$('q3rvo').textContent=ideal?'∞ (ideal)':fR(Rv);
+  const Req=par(R,Rv),Vi=VG*R/(2*R),Vr=VG*Req/(R+Req),ea=Vr-Vi,er=ea/Vi*100;
+
+  $('svg3').innerHTML=wrap(
+    dmm(f(Vr,3)+' V','V','R_V = '+fR(Rv)+' en paral·lel amb R2')+source(f(VG,2)+' V','límit de corrent = 100 mA')+boardBase()
+    +hl(9,'U','#f59e0b')+hl(14,'U','#38bdf8')+hl(20,'U','#3b82f6')
+    +res(9,14,'H',R,'R1 = '+fR(R))+res(14,20,'G',R,'R2 = '+fR(R),true)
+    +tag(9,'D','A (+)','#b45309')+tag(14,'D','B','#0369a1')+tag(20,'D','C (GND)','#1d4ed8')
+    +banner('R2 ∥ R_V = '+fR(Req)+'  ·  V_BC = '+f(Vr,3)+' V','#075985')
+    +wire(rp(9),pt(9,'J'),'red')+wire(rn(20),pt(20,'J'),'blue')
+    +wire(SP,rp(2),'red')+wire(SN,rn(3),'black')
+    +wire(TV,pt(14,'J'),'yellow')+wire(TC,rn(11),'green'));
+
+  $('r3').innerHTML=stat('s3a','R2 ∥ R<sub>V</sub>')+stat('s3b','V ideal (V)')+stat('s3c','V real (V)')+stat('s3d','Error absolut (V)',true)+stat('s3e','Error relatiu (%)',true)+stat('s3f','R<sub>V</sub>/R<sub>2</sub>');
+  $('s3a').textContent=fR(Req);$('s3b').textContent=f(Vi,3);$('s3c').textContent=f(Vr,3);$('s3d').textContent=f(ea,3);$('s3e').textContent=f(er,2);
+  $('s3f').textContent=isFinite(Rv)?f(Rv/R,1):'∞';
+  $('b3a').style.width=(Vi/VG*100)+'%';$('b3b').style.width=(Vr/VG*100)+'%';
+
+  const curve=Rr=>{const a=[];for(let i=0;i<=80;i++){const rv=Math.pow(10,5+4*i/80);const e=par(Rr,rv);a.push([rv,(e/(Rr+e)/0.5-1)*100])}return a};
+  const cols={1e7:'#f59e0b',1e6:'#34d399',1e5:'#38bdf8',1e4:'#a78bfa'};
+  const lines=[1e7,1e6,1e5,1e4].map(Rr=>({p:curve(Rr),c:cols[Rr],w:Rr===R?3.4:1.4,lab:'R1 = R2 = '+fR(Rr)}));
+  const dots=isFinite(Rv)?[{x:Rv,y:er,c:'#ffffff',r:8,ring:true}]:[];
+  plot($('cv3'),{xlog:true,xmin:1e5,xmax:1e9,ymin:-50,ymax:0,xticks:[1e5,1e6,1e7,1e8,1e9],yticks:[-50,-40,-30,-20,-10,0],xf:fR,yl:'Error relatiu (%)',xl:'Resistència d\'entrada del voltímetre R_V',lines:lines,dots:dots});
+}
+function memo3(){
+  const VG=7,R=1e7,Rv=1e7,Req=par(R,Rv),Vi=VG*R/(2*R),Vr=VG*Req/(R+Req),ea=Vr-Vi,er=ea/Vi*100;
+  $('memo3').textContent=
+`QÜESTIÓ 3. Error d'intrusisme del voltímetre en un divisor d'alta impedància
+Autor: Adam El Bouchaibi Charrout
+
+Circuit de la figura 3.10: VG = 7 V, R1 = R2 = 10 MΩ. Es mesura la tensió entre B i C amb el multímetre RS PRO IDM-8341, de resistència d'entrada RV = 10 MΩ.
+
+Valor sense intrusisme (voltímetre ideal, RV → ∞):
+  VBC = VG · R2 / (R1 + R2) = 7 · 10 / (10 + 10) = ${c(Vi,2)} V
+
+Valor amb el voltímetre real:
+  El voltímetre queda en paral·lel amb R2: Req = R2 ∥ RV = (10 MΩ · 10 MΩ) / (10 MΩ + 10 MΩ) = ${c(Req/1e6,0)} MΩ
+  VBC = VG · Req / (R1 + Req) = 7 · 5 / (10 + 5) = ${c(Vr,2)} V
+
+Resultat esperat de la mesura: VBC ≈ ${c(Vr,2)} V.
+Error absolut: ${c(ea,2)} V. Error relatiu: ${c(er,2)} %.
+
+Anàlisi:
+Aquest és un error d'intrusisme (o de càrrega). El voltímetre no és ideal: en connectar-lo entre B i C modifica el circuit, ja que la seva resistència d'entrada RV es posa en paral·lel amb R2. Com que R2 = 10 MΩ és igual a RV, la resistència equivalent es redueix a la meitat (5 MΩ) i la tensió mesurada cau un 33,33 % respecte de la que hi havia abans de connectar l'instrument. L'error només és petit si RV ≫ R2. En circuits d'alta impedància (MΩ) els voltímetres de 10 MΩ no són adequats per mesurar amb precisió i cal un instrument amb una resistència d'entrada molt més gran (per exemple ≥ 1 GΩ).`;
+}
+
+/* ---------- Q4 ---------- */
+const VG4=10,R14=220,R24=100,RV4=1e7;
+function calc4(RA){
+  const Iid=VG4/(R14+R24)*1000,Ist=VG4/(R14+R24+RA)*1000;
+  const Req=par(R24,RV4),Vind=VG4*Req/(R14+Req),Iind=Vind/R24*1000;
+  return {Iid,Ist,errD:(Ist-Iid)/Iid*100,Vid:Iid*R24/1000,Vst:Ist*R24/1000,Vind,Iind,errI:(Iind-Iid)/Iid*100};
+}
+function board4(direct,k,RA){
+  let s=(direct?dmm(f(k.Ist,2)+' mA','mA','sèrie amb R2 · R_A = '+f(RA,1)+' Ω'):dmm(f(k.Vind,3)+' V','V','paral·lel amb R2'))
+    +source(f(VG4,2)+' V','límit de corrent = 100 mA')+boardBase()
+    +hl(20,'U','#f59e0b')+hl(15,'U',direct?'#f59e0b':'#38bdf8')+hl(10,'U',direct?'#f59e0b':'#38bdf8')
+    +res(20,15,'H',R14,'R1 = 220 Ω')+res(15,10,'G',R24,'R2 = 100 Ω',true)
+    +tag(20,'D','+10 V','#b45309')+tag(15,'D','nus R1/R2','#b45309')+tag(10,'D',direct?'a l\'amperímetre':'GND','#1d4ed8')
+    +banner(direct?'MESURA DIRECTA: el circuit s\'obre i l\'amperímetre queda en SÈRIE':'MESURA INDIRECTA: voltímetre en PARAL·LEL amb R2, circuit sense obrir',direct?'#92400e':'#075985')
+    +wire(rp(20),pt(20,'J'),'red')+wire(SP,rp(2),'red')+wire(SN,rn(3),'black')
+    +wire(TC,rn(12),'green');
+  if(direct){
+    s+=wire(pt(10,'J'),rn(10),'blue',{ghost:true})
+      +`<text x="${hx(10)-14}" y="${OY+44}" font-size="10" font-weight="700" fill="#b91c1c" text-anchor="end">pont retirat: circuit obert</text>`
+      +wire(TM,pt(10,'I'),'yellow');
+  }else{
+    s+=wire(pt(10,'J'),rn(10),'blue')+wire(TV,pt(15,'J'),'yellow');
+  }
+  return wrap(s);
+}
+function render4(){
+  const RA=+$('q4ra').value,k=calc4(RA);
+  $('svg4a').innerHTML=board4(true,k,RA);
+  $('svg4b').innerHTML=board4(false,k,RA);
+
+  $('r4').innerHTML=stat('s4a','I ideal (mA)')+stat('s4b','I* amb R<sub>A</sub> (mA)')+stat('s4c','Error directa (%)',true)+stat('s4d','V<sub>R2</sub> ideal (V)')
+    +stat('s4e','V<sub>R2</sub> amb R<sub>A</sub> (V)')+stat('s4f','V<sub>R2</sub> indirecta (V)')+stat('s4g','I indirecta V/R<sub>2</sub> (mA)')+stat('s4h','Error indirecta (%)',true);
+  $('s4a').textContent=f(k.Iid,3);$('s4b').textContent=f(k.Ist,3);$('s4c').textContent=f(k.errD,3);$('s4d').textContent=f(k.Vid,4);
+  $('s4e').textContent=f(k.Vst,4);$('s4f').textContent=f(k.Vind,4);$('s4g').textContent=f(k.Iind,3);$('s4h').textContent=f(k.errI,4);
+
+  const a=[];for(let r=0;r<=100;r+=2)a.push([r,-r/(R14+R24+r)*100]);
+  plot($('cv4'),{xmin:0,xmax:100,ymin:-25,ymax:2,xticks:[0,20,40,60,80,100],yticks:[-25,-20,-15,-10,-5,0],xl:'Resistència interna de l\'amperímetre R_A (Ω)',yl:'Error relatiu (%)',
+    lines:[{p:a,c:'#f59e0b',lab:'Directa: I* = VG/(R1 + R2 + RA)'},{p:[[0,k.errI],[100,k.errI]],c:'#34d399',lab:'Indirecta: V/R2 amb voltímetre de 10 MΩ'}],
+    dots:[{x:RA,y:k.errD,c:'#ffffff',r:8,ring:true}]});
+
+  $('memo4').textContent=
+`QÜESTIÓ 4. Error d'intrusisme de l'amperímetre i mesura indirecta del corrent
+Autor: Adam El Bouchaibi Charrout
+
+Circuit de la figura 3.11: VG = 10 V, R1 = 220 Ω, R2 = 100 Ω.
+
+Valor ideal (amperímetre ideal, RA = 0):
+  I = VG / (R1 + R2) = 10 / (220 + 100) = ${c(k.Iid,2)} mA
+  VR2 = I·R2 = ${c(k.Vid,3)} V
+
+Mesura directa amb l'amperímetre (RA = ${c(RA,1)} Ω):
+  Per mesurar cal obrir la malla i inserir l'amperímetre en sèrie, de manera que s'afegeix RA a la resistència total:
+  I* = VG / (R1 + R2 + RA) = 10 / (220 + 100 + ${c(RA,1)}) = ${c(k.Ist,2)} mA
+  Error relatiu: ${c(k.errD,2)} %
+
+Mesura indirecta amb el voltímetre (figura 3.12):
+  Es mesura només la tensió a R2, sense obrir el circuit: VR2 = ${c(k.Vind,3)} V (el voltímetre de 10 MΩ en paral·lel amb 100 Ω no altera el circuit).
+  I = VR2 / R2 = ${c(k.Vind,3)} / 100 = ${c(k.Iind,2)} mA
+  Error relatiu: ${c(k.errI,4)} %
+
+Anàlisi:
+L'error d'intrusisme de l'amperímetre és petit només si RA ≪ R1 + R2. Com que RA es posa en sèrie, la corrent mesurada I* és sempre menor que la que hi havia abans de connectar-lo. Amb RA = ${c(RA,1)} Ω l'error és de ${c(k.errD,2)} %. En la mesura indirecta el voltímetre es connecta en paral·lel i la seva resistència d'entrada (10 MΩ) és molt més gran que R2 = 100 Ω, de manera que el circuit gairebé no es modifica. A més, no cal dessoldar ni obrir la malla, cosa útil en plaques de circuit imprès. L'inconvenient és que el resultat depèn del valor real de R2 (tolerància ±5 %).`;
+}
+
+/* ---------- wiring ---------- */
+const R_={1:render1,2:render2,3:render3,4:render4};
+let cur=1;
+function show(n){
+  cur=n;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p'+n));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',+b.dataset.t===n));
+  R_[n]();
+}
+function mark(box,btn){box.querySelectorAll('.opt').forEach(b=>b.classList.toggle('on',b===btn))}
+
+$('c1').innerHTML=sl('q1v','Tensió de la font VG',0,8,0.1,8,'V',1)+sl('q1tol','Desviació de R respecte del nominal',-5,5,0.1,0,'%',1)+sl('q1ra','R<sub>A</sub> de l\'amperímetre',0,5,0.1,1.5,'Ω',1)+sl('q1rc','Resistència de contacte R<sub>c</sub>',0,3,0.1,0.5,'Ω',1);
+$('c2').innerHTML=sl('q2x','Posició del cursor x',0,1,0.001,0.5,'',3);
+$('c3').innerHTML=sl('q3vg','Tensió de la font VG',1,10,0.1,7,'V',1)
+  +`<label class="block mb-3"><div class="flex justify-between text-sm"><span>R<sub>V</sub> del voltímetre</span><b id="q3rvo" class="text-amber-300">10 MΩ</b></div><input type="range" id="q3rv" min="0" max="100" step="1" value="50"></label>`
+  +`<label class="flex items-center gap-2 text-sm mb-3"><input type="checkbox" id="q3id"> Voltímetre ideal (R<sub>V</sub> = ∞)</label>`;
+$('c4').innerHTML=sl('q4ra','Resistència interna de l\'amperímetre R<sub>A</sub>',0,100,0.1,1.5,'Ω',1);
+$('q2x').value=xcal();$('q2xo').textContent=f(xcal(),3);
+
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.u!==undefined){const o=$(t.id+'o');if(o)o.textContent=Number(t.value).toFixed(+t.dataset.d)+' '+t.dataset.u}
+  const q=t.closest('[data-q]');if(q)R_[q.dataset.q]();
+});
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)show(+b.dataset.t)});
+$('o2').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;mark($('o2'),b);S2=b.dataset.v==='inf'?Infinity:+b.dataset.v;render2()});
+$('o3').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;mark($('o3'),b);S3=+b.dataset.v;render3()});
+$('o4').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;mark($('o4'),b);$('q4ra').value=b.dataset.v;$('q4rao').textContent=Number(b.dataset.v).toFixed(1)+' Ω';render4()});
+$('cal2').addEventListener('click',()=>{const x=xcal();$('q2x').value=x;$('q2xo').textContent=f(x,3);render2()});
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-copy]');if(!b)return;
+  const txt=$(b.dataset.copy).textContent;
+  const done=()=>{b.textContent='Copiat';setTimeout(()=>{b.textContent='Copia al porta-retalls'},1600)};
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done()};
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(done).catch(fb);else fb();
+});
+window.addEventListener('resize',()=>R_[cur]());
+
+memo2();memo3();
+render1();render2();render3();render4();
+</script>
+</body>
+</html>
