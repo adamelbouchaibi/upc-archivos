@@ -14,7 +14,12 @@ public class Prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        String a="HOLA";
+        
+        
+        System.out.println(a.compareTo("Adam"));
+        
+        
     }
     
 }
