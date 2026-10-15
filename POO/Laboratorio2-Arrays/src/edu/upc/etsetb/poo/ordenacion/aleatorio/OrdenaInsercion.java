@@ -1,0 +1,53 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package edu.upc.etsetb.poo.ordenacion.aleatorio;
+
+import edu.upc.etsetb.poo.ordenacion.*;
+
+/**
+ *
+ * @author adam.el.bouchaibi
+ */
+public class OrdenaInsercion {
+    public static void main (String args[]){
+        /*INSERTAR aquí el código que declara, crea e inicializa convenientemente el array de enteros
+            {30, 15, 2, 21, 44, 8}*/
+        
+        
+        int arrayEnteros[]={30, 15, 2, 21, 44, 8};
+        
+        System.out.print("El array sin ordenar es: \n[ ");
+        for (int i=0; i<arrayEnteros.length;i++){
+            
+            System.out.print(arrayEnteros[i]+ " ");
+        }
+        System.out.print("]");
+        
+        for(int i=1;i<arrayEnteros.length;i++){
+            
+            int ref=arrayEnteros[i];
+            int j =i-1;
+            
+            while(j>=0 && arrayEnteros[j]>ref){
+                
+                arrayEnteros[j+1]=arrayEnteros[j];
+                
+                j=j-1;   
+            }
+            
+            arrayEnteros[j+1]=ref;
+        
+        }
+        
+        
+        System.out.print("\nEl array ordenado es \n[ ");
+        
+        for (int i=0; i<arrayEnteros.length;i++){
+            
+            System.out.print(arrayEnteros[i]+ " ");
+        }
+        System.out.print("]");
+    }
+}

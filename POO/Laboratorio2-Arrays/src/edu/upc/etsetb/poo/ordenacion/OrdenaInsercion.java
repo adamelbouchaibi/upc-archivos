@@ -6,17 +6,17 @@ package edu.upc.etsetb.poo.ordenacion;
 
 /**
  *
- * @author adamelbouchaibi
+ * @author adam.el.bouchaibi
  */
 public class OrdenaInsercion {
-    
     public static void main (String args[]){
         /*INSERTAR aquí el código que declara, crea e inicializa convenientemente el array de enteros
             {30, 15, 2, 21, 44, 8}*/
         
-        System.out.print("[ ");
+        
         int arrayEnteros[]={30, 15, 2, 21, 44, 8};
         
+        System.out.print("El array sin ordenar es: \n[ ");
         for (int i=0; i<arrayEnteros.length;i++){
             
             System.out.print(arrayEnteros[i]+ " ");
@@ -38,7 +38,9 @@ public class OrdenaInsercion {
             arrayEnteros[j+1]=ref;
         
         }
-        System.out.print("\n[ ");
+        
+        
+        System.out.print("\nEl array ordenado es \n[ ");
         
         for (int i=0; i<arrayEnteros.length;i++){
             
