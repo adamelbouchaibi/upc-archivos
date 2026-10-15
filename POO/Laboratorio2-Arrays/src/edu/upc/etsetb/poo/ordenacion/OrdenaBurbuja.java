@@ -15,6 +15,17 @@ public class OrdenaBurbuja {
         int arrayEnteros[]={30, 15, 2, 21, 44, 8, 111,-1};
         int aux;
         boolean  intercambios=true;
+        
+        System.out.print("\nEl array sin ordenar es \n[ ");
+        
+        for (int i=0; i<arrayEnteros.length;i++){
+            
+            System.out.print(arrayEnteros[i]+ " ");
+        }
+        System.out.print("]");
+        
+        
+        
         while(intercambios){
             intercambios=false;
             for(int i=0;i<arrayEnteros.length-1;i++){
