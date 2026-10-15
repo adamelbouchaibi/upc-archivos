@@ -13,7 +13,7 @@ public class OrdenaBurbuja {
     public static void main (String[] args){
         
         Random random = new Random();
-        int arrayEnteros[]=new int[random.nextInt(10)+1];
+        int[] arrayEnteros=new int[random.nextInt(10)+1];
         
         for(int i=0;i<arrayEnteros.length;i++){
             arrayEnteros[i]=random.nextInt(40);
