@@ -14,10 +14,10 @@ public class Prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String a="   a  a   a     ";
+        String a="   a  a   a    a ";
         
         
-        System.out.println(a.trim());
+        System.out.print(a.trim());
         
         
     }
