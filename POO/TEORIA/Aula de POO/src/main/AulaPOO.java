@@ -21,4 +21,10 @@ public class AulaPOO {
         this.numGrup=numGrup;
         this.matriculats = new LinkedList<>();
     }
+    
+    // Resta de mètodes...
+    
+    public void matriculaAlumne (AlumnePOO alumne){
+        this.matriculats.add(alumne);
+    }
 }

@@ -14,6 +14,10 @@ public class TestAulaPOO {
         
         AulaPOO aula = new AulaPOO(10);
         
+        AlumnePOO alumne = new AlumnePOO("Adam", "60233980Q");
+        
+        aula.matriculaAlumne(alumne);
+        
     }
     
 }
