@@ -12,7 +12,7 @@ public class OrdenaBurbuja {
     
     
     public static void main (String[] args){
-        int arrayEnteros[]={30, 15, 2, 21, 44, 8, 111,-1};
+        int arrayEnteros[]={10, 3, 7, 6, 9, 8, 7, 1};
         int aux;
         boolean  intercambios=true;
         

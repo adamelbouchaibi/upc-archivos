@@ -46,7 +46,5 @@ public class OrdenaBurbuja {
         }
         System.out.print("]");
         
-        System.out.print(random.nextInt(2));
-        
     }
 }
