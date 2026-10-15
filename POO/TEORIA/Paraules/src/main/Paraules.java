@@ -18,6 +18,7 @@ public interface Paraules {
         llista.add("UPC");
         llista.add("ETSETB");
         llista.add("POO");
+        llista.add(0,"TELECOS");
         
         System.out.println(llista.get(0));
         
