@@ -17,7 +17,7 @@ public class Prueba {
         String a="HOLA";
         
         
-        System.out.println(a.compareTo("Adam"));
+        System.out.println(a.compareTo("Zdam"));
         
         
     }
