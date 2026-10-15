@@ -4,6 +4,7 @@
  */
 package main;
 import java.util.LinkedList;
+import java.util.Iterator;
 
 /**
  *
@@ -24,6 +25,15 @@ public interface Paraules {
         llista.add(0,"TELECOS");
         
         System.out.println("Nombre de paraules guardades " + llista.size());
+        
+        Iterator<String> it = llista.iterator();
+        
+        while(it.hasNext()){
+            
+            String paraula=it.next();
+            System.out.println(paraula);
+            
+        }
         
     }
     
