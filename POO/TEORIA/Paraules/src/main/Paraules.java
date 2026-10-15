@@ -15,12 +15,15 @@ public interface Paraules {
         
         LinkedList<String> llista = new LinkedList<>();
         
+        
+        System.out.println("Nombre de paraules guardades " + llista.size());
+        
         llista.add("UPC");
         llista.add("ETSETB");
         llista.add("POO");
         llista.add(0,"TELECOS");
         
-        System.out.println("Nombre de paraules guardades" + llista.size());
+        System.out.println("Nombre de paraules guardades " + llista.size());
         
     }
     
