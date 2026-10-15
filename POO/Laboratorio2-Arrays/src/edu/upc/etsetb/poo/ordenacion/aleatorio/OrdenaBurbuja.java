@@ -44,7 +44,7 @@ public class OrdenaBurbuja {
             
             System.out.print(arrayEnteros[i]+ " ");
         }
-        System.out.print("]");
+        System.out.print("]\n");
         
     }
 }
