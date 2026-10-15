@@ -14,10 +14,10 @@ public class Prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String a="casamiento";
+        String a="   a   a     ";
         
         
-        System.out.println(a.compareTo("casa"));
+        System.out.println(a.trim());
         
         
     }
