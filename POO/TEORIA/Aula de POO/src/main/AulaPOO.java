@@ -4,10 +4,21 @@
  */
 package main;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author adamelbouchaibi
  */
 public class AulaPOO {
+    // Definició d'atributs
+    private int numGrup;
+    private LinkedList<AlumnePOO> matriculats;
     
+    // Métode constructor
+    
+    public AulaPOO(int numGrup){
+        this.numGrup=numGrup;
+        this.matriculats = new LinkedList<>();
+    }
 }

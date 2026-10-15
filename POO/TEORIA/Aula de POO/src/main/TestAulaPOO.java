@@ -10,4 +10,10 @@ package main;
  */
 public class TestAulaPOO {
     
+    public static void main (String[] args){
+        
+        AulaPOO aula = new AulaPOO(10);
+        
+    }
+    
 }
