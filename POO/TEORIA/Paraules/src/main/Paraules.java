@@ -16,8 +16,10 @@ public interface Paraules {
         LinkedList<String> llista = new LinkedList<>();
         
         llista.add("UPC");
+        llista.add("ETSETB");
+        llista.add("POO");
         
-        System.out.print(llista.get(0));
+        System.out.println(llista.get(0));
         
     }
     
