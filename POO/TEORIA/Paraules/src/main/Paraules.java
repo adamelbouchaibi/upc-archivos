@@ -20,7 +20,7 @@ public interface Paraules {
         llista.add("POO");
         llista.add(0,"TELECOS");
         
-        System.out.println(llista.get(0));
+        System.out.println("Nombre de paraules guardades" + llista.size());
         
     }
     
