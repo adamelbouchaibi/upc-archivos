@@ -4,7 +4,7 @@
  */
 package edu.upc.etsetb.poo.ordenacion.aleatorio;
 
-import edu.upc.etsetb.poo.ordenacion.*;
+import java.util.Random;
 
 /**
  *
@@ -15,8 +15,14 @@ public class OrdenaInsercion {
         /*INSERTAR aquí el código que declara, crea e inicializa convenientemente el array de enteros
             {30, 15, 2, 21, 44, 8}*/
         
+        Random random = new Random();
         
-        int arrayEnteros[]={30, 15, 2, 21, 44, 8};
+        int arrayEnteros[]= new int[random.nextInt(10)+1];
+        
+        for(int i=0;i<arrayEnteros.length;i++){
+            arrayEnteros[i]=random.nextInt(40);
+        }
+        
         
         System.out.print("El array sin ordenar es: \n[ ");
         for (int i=0; i<arrayEnteros.length;i++){
