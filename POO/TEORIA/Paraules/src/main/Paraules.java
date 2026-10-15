@@ -30,8 +30,8 @@ public interface Paraules {
         
         while(it.hasNext()){
             
-            String paraula=it.next();
-            System.out.println(paraula);
+            //String paraula=it.next();
+            System.out.print("\n" + it.next());
             
         }
         
