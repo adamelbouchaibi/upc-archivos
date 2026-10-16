@@ -5,6 +5,7 @@
 package main;
 
 import java.util.LinkedList;
+import java.util.Iterator;
 
 /**
  *
@@ -26,5 +27,16 @@ public class AulaPOO {
     
     public void matriculaAlumne (AlumnePOO alumne){
         this.matriculats.add(alumne);
+    }
+    
+    public void llistaInfoAlumnesPerPantalla(){
+        Iterator<AlumnePOO> it = this.matriculats.iterator();
+        
+        while(it.hasNext()){
+            
+           AlumnePOO a = it.next();
+           
+           System.out.println(a.getNom() + ";" + a.getNif());
+        }
     }
 }

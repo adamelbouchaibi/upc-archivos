@@ -17,6 +17,11 @@ public class TestAulaPOO {
         AlumnePOO alumne = new AlumnePOO("Adam", "60233980Q");
         
         aula.matriculaAlumne(alumne);
+        aula.matriculaAlumne(alumne);
+        aula.matriculaAlumne(alumne);
+        
+        aula.llistaInfoAlumnesPerPantalla();
+        
         
     }
     
