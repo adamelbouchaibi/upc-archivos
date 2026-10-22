@@ -17,6 +17,7 @@ public class BuscadorDePalabras {
         
         System.out.println("Introduce la palabra a buscar");
         
+        lector.useDelimiter(" ");
         String textoBusqueda = lector.next();
         
         

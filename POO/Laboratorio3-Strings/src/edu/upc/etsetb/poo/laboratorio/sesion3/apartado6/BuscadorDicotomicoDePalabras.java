@@ -27,9 +27,7 @@ public class BuscadorDicotomicoDePalabras {
             
             if ( ref.equals(aBuscar) ){
                 trobat = true;
-            } 
-            
-            if (ref.compareTo(aBuscar)<0){
+            } else if (ref.compareTo(aBuscar)<0){
                 primera = centro +1;
             } else {
                 
