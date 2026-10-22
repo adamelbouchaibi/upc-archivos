@@ -20,19 +20,18 @@ public class BuscadorDePalabras {
         String textoBusqueda = lector.next();
         
         
-        String palabra = "Hola como te encuentras?";
-        String[] fragmentos= palabra.split(" ");
-        String palabraN = fragmentos[2];
+        String[] fragmentos= textoBase.split(" ");
         
-        //palabraN="adios";*/  /// APARTADO ANTERIOR
+        
+        
         
        boolean trobat= false;
        int i=0;
        while(!trobat &&  i<fragmentos.length){
            
-           if(fragmentos[i].equals(palabraN)){
+           if(fragmentos[i].equals(textoBusqueda)){
                trobat=true;
-               System.out.println("Se ha encontrado la palabra "+ palabraN + " en la posicion " + (i+1));
+               System.out.println("Se ha encontrado la palabra "+ textoBusqueda + " en la posicion " + (i+1));
            } else i++;
            
        }
