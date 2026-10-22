@@ -22,11 +22,13 @@ public class Acronims {
        defAcronims.put("UPC", "Universitat Politècinca de Catalunya");
        defAcronims.put("ETSETB","Escola Tècnica Superior d'Enginyeria de Telecomunicacions de Barcelona");
        
-      Iterator<String> itv = defAcronims.keySet().iterator();
+      Iterator<String> itv = defAcronims.values().iterator();
       
       while(itv.hasNext()){
           
           System.out.println(itv.next());
       }
+      
+      System.out.println(defAcronims.get("POO"));
 }
 }
