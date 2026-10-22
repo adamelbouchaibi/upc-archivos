@@ -26,7 +26,6 @@ public class BuscadorDicotomicoDePalabras {
             ref=arrayPalabras[centro];
             
             if ( ref.equals(aBuscar) ){
-                System.out.println("Se ha encontrado: " + aBuscar);
                 trobat = true;
             } 
             
