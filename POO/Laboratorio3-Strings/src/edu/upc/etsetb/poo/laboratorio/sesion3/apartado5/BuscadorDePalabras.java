@@ -20,7 +20,7 @@ public class BuscadorDePalabras {
         String textoBusqueda = lector.next();
         
         
-        /*String palabra = "Hola como te encuentras?";
+        String palabra = "Hola como te encuentras?";
         String[] fragmentos= palabra.split(" ");
         String palabraN = fragmentos[2];
         
