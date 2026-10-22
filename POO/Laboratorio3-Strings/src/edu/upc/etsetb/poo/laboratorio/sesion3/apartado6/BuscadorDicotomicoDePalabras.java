@@ -17,8 +17,29 @@ public class BuscadorDicotomicoDePalabras {
         
         String[] arrayPalabras = palabras.split(" ");
         
-        int primera = 0, ultima = arrayPalabras.length-1 , centro = (ultima+primera)/2;
-        System.out.println(primera +" " +  centro +" "+ ultima);
+        int primera = 0, ultima = arrayPalabras.length-1 ; 
+        String ref;
+        
+        boolean trobat = false;
+        while(primera<=ultima && !trobat){
+            int centro = (ultima+primera)/2;
+            ref=arrayPalabras[centro];
+            
+            if ( ref.equals(aBuscar) ){
+                System.out.println("Se ha encontrado: " + aBuscar);
+                trobat = true;
+            } 
+            
+            if (ref.compareTo(aBuscar)<0){
+                primera = centro +1;
+            } else {
+                
+                ultima = centro -1;
+            }
+        }
+        
+        if(trobat) System.out.println("S'ha trobat");
+        if(!trobat) System.out.println("No s'ha trobat");
         
     }
     
