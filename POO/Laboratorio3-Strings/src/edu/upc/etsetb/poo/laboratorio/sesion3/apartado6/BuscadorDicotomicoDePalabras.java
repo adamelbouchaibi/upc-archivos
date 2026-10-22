@@ -18,7 +18,7 @@ public class BuscadorDicotomicoDePalabras {
         String[] arrayPalabras = palabras.split(" ");
         
         int primera = 0, ultima = arrayPalabras.length-1 , centro = (ultima+primera)/2;
-        System.out.println(primera, centro, ultima);
+        System.out.println(primera + centro + ultima);
         
     }
     
