@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package main;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 /**
@@ -21,6 +22,11 @@ public class Acronims {
        defAcronims.put("UPC", "Universitat Politècinca de Catalunya");
        defAcronims.put("ETSETB","Escola Tècnica Superior d'Enginyeria de Telecomunicacions de Barcelona");
        
+      Iterator<String> itv = defAcronims.values().iterator();
       
+      while(itv.hasNext()){
+          
+          System.out.println(itv.next());
+      }
 }
 }
