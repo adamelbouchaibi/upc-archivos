@@ -10,19 +10,19 @@ package edu.upc.etsetb.poo.laboratorio.sesion3.apartado2;
  */
 public class StringVsStringBuilder {
    
-  public static void main(String[] args) {
-    long startTime = System.currentTimeMillis();
-    
-    String str = "";
-    for (int i = 0; i < 10000; i++) {
-      str += "a";
-    }
-    
-    long endTime = System.currentTimeMillis();
-    System.out.println("String Time: " + (endTime - startTime) + " ms");
-  } 
+//  public static void main(String[] args) {
+//    long startTime = System.currentTimeMillis();
+//    
+//    String str = "";
+//    for (int i = 0; i < 10000; i++) {
+//      str += "a";
+//    }
+//    
+//    long endTime = System.currentTimeMillis();
+//    System.out.println("String Time: " + (endTime - startTime) + " ms");
+//  } 
 
-  /*public static void main(String[] args) {
+  public static void main(String[] args) {
     long startTime = System.currentTimeMillis();
 
     StringBuilder str = new StringBuilder();
@@ -32,6 +32,6 @@ public class StringVsStringBuilder {
 
     long endTime = System.currentTimeMillis();
     System.out.println("String Time: " + (endTime - startTime) + " ms");
-  }*/
+  }
   
 }
