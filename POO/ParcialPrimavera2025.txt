@@ -1,0 +1,40 @@
+PREGUNTA 1
+--------------------------------------------------------------------
+
+public class InterfazUsuario {
+	
+	private Controlador Controlador;
+		
+}
+
+public class Controlador {
+	
+	private InterfazUsuario iu;
+	private HashMap<String,Usuario> usuarios; // Claus: emails
+	private HashMap<Integer, Trabajo> trabajos; // Claus: id's
+	private HashMap<String, Impresora> impresoras; // Claus: noms
+	
+}
+
+public class Usuario {
+	private String, email, apellidos, nombres;
+}
+
+public class Trabajo {
+	private int identiicador;
+	privete String nombreFIchero;
+	private bolean requiereColor;
+	private int numPaginas;
+	
+	private Usuario usuario;
+}
+
+public class Impresora {
+	public satic final IMPRESORA_COLOR = 1;
+	public satic final IMPRESION_BN = 2; 
+	private int tipo;
+	private String nombre;
+	private int pagResAct;
+	private LinkedList<Treabajo> cola;
+	private Trabajo actual;
+}
