@@ -13,7 +13,7 @@ public class Complex {
     private double real;
     private double imaginary;
     
-    public Complex(double real, double imaginary){
+   public Complex(double real, double imaginary){
       this.real=real;
       this.imaginary=imaginary;
     }
@@ -74,26 +74,30 @@ public class Complex {
   }
   
   public double getFase(){
-      double fase = 0;
-      if (this.real>0 && this.imaginary>=0){
-        fase=Math.atan(this.imaginary/this.real);  
-      } else if (this.real<0 && this.imaginary>=0){
-          fase=PI-Math.atan(-this.imaginary/this.real);   
-      } else if (this.real<0 && this.imaginary<=0){
-          fase=PI+Math.atan(this.imaginary/this.real);
-          
-      }else if (this.real>0 && this.imaginary<=0){
-          fase=2*PI-atan(-this.imaginary/this.real);
-      }
-      
-    return fase;
+//      OPCIÓN 1:
+//      double fase = PI/2;
+//      if (this.imaginary<0) fase = 3*PI/2;
+//      if (this.real>0 && this.imaginary>=0){
+//        fase=Math.atan(this.imaginary/this.real);  
+//      } else if (this.real<0 && this.imaginary>=0){
+//          fase=PI-Math.atan(-this.imaginary/this.real);   
+//      } else if (this.real<0 && this.imaginary<=0){
+//          fase=PI+Math.atan(this.imaginary/this.real);
+//          
+//      }else if (this.real>0 && this.imaginary<=0){
+//          fase=2*PI-atan(-this.imaginary/this.real);
+//      }
+//      
+//    return fase;
+        
+    //OPCIÓN 2:
+      return Math.atan2(this.imaginary,this.real);
       } 
   
   public Complex divide(Complex c){
-      Complex dividendo = new Complex(this.real,this.imaginary);
       
-      double moduloR = dividendo.getModulo() / c.getModulo();
-      double faseR = dividendo.getFase()-c.getFase();
+      double moduloR = this.getModulo() / c.getModulo();
+      double faseR = this.getFase()-c.getFase();
       
       while (faseR<0){ faseR+=2*PI;}
       
