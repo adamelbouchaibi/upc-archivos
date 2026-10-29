@@ -73,25 +73,32 @@ public class Complex {
       return sqrt(this.imaginary*this.imaginary+this.real*this.real);
   }
   
-  public double getFase(){ /////// NO FUNCIONA :(
-      
-      double fase=0;
-      
-      if(this.real==0 && this.imaginary>0) return PI/2;
-      if(this.real==0 && this.imaginary<0) return 3*PI/2;
-      
-      if(this.real>=0 && this.imaginary>=0){
-          fase=atan(this.imaginary/this.real);
-      }else if(this.real<=0 && this.imaginary>0){
+  public double getFase(){
+      double fase = 0;
+      if (this.real>0 && this.imaginary>=0){
+        fase=Math.atan(this.imaginary/this.real);  
+      } else if (this.real<0 && this.imaginary>=0){
+          fase=PI-Math.atan(-this.imaginary/this.real);   
+      } else if (this.real<0 && this.imaginary<=0){
+          fase=PI+Math.atan(this.imaginary/this.real);
           
-          fase=PI+atan(this.imaginary/this.real);
       }else if (this.real>0 && this.imaginary<=0){
-          fase=2*PI-atan(this.imaginary/this.real);
-      }else if (this.real<0 & this.imaginary<0){
-          fase=atan(this.imaginary/this.real)+PI;
+          fase=2*PI-atan(-this.imaginary/this.real);
       }
-
       
     return fase;
+      } 
+  
+  public Complex divide(Complex c){
+      Complex dividendo = new Complex(this.real,this.imaginary);
+      
+      double moduloR = dividendo.getModulo() / c.getModulo();
+      double faseR = dividendo.getFase()-c.getFase();
+      
+      while (faseR<0){ faseR+=2*PI;}
+      
+      return new Complex(moduloR*Math.cos(faseR),moduloR*Math.sin(faseR));
+      
   }
-}
+  
+  }

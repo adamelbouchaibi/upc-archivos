@@ -26,6 +26,8 @@ public class test {
           System.out.println(c1.mult(c2).toString());
           
           System.out.println(c1.getFase()*2);
+          
+          System.out.println(PI);
     }
     
    
