@@ -36,5 +36,61 @@ public class Impresora {
 	private String nombre;
 	private int pagResAct;
 	private LinkedList<Treabajo> cola;
-	private Trabajo actual;
+	private Trabajo actual;			//null si no imprimeix en aquest moment
+}
+
+
+PREGUNTA 2
+-------------------------------------------------------------
+
+public class Impressora {
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Nombre: ").append(this.nombre).append("\n");
+		sb.append("Tipo: ");
+		
+		if(this.tipo==IMPRESSION_COLOR){
+			sb.append("Impresión a color.\n");
+		 } else { sb.append("Impresion B/N. \n");}
+		
+		if(this.actual != null){
+			sb.append("Actualmente imprimiendo: \n");
+			sb.append("ID: ").append(this.actual.getIdentificador());
+			sb.append("pàg.restantes: ").append(this.pagResAct).append(") \n"));
+		}
+		
+		sb.append("Trabajos en cola:\");
+		if(this.cola.size() == 0){
+			sb.append(" Cola vacía.\n");
+		} else {
+			
+			for(Trabajo r: this.cola) {
+				sb.append("ID: ").append(t.getIdentificador());
+				sb.appedn("(").append(t.getNumPaginas());
+				sb.append("pag");
+			}
+		}
+		
+		return sb.toString();
+	}
+
+}
+
+PREGUNTA 3
+-------------------------------------------------------------
+
+public class Impresora {
+	
+	public int getTrabajoEnCola (int id){
+		
+		for (Trabajo t : this.cola){
+			if(t.getIdentificador() == id) {
+				return t; }
+		}
+		
+		return null; // no s'ha trobat
+	}
+
 }
