@@ -53,7 +53,15 @@ public class Adventurer {
     }
     
     public int drop (String itemName){
-        return 1;
+        Item i = inventory.remove(itemName.toLowerCase());
+        
+        if(i!=null){
+            room.putItem(i);
+            return OK_ACTION;
+        }else {
+            return NO_SUCH_ITEM_IN_INVENTORY;
+        }
+        
     }
     public Room getCurrentLocation(){
         return this.room;
