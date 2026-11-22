@@ -35,6 +35,7 @@ public class Adventurer {
         return NO_SUCH_EXIT;
     }
     public int pickUp(String itemName){
+        itemName=itemName.toLowerCase();
         Item n =room.retrieveItem(itemName);
         if(n != null){
             if(this.encumbrance+n.getEncumbrance()<=MAX_ENCUMBRANCE){

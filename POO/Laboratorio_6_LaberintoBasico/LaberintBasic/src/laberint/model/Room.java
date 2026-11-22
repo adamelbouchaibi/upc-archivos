@@ -29,11 +29,11 @@ public class Room {
     }
     
     public void putItem(Item item){
-        this.items.put(item.getName(),item);
+        this.items.put(item.getName().toLowerCase(),item);
     }
     
     public Item retrieveItem(String itemName){
-        return this.items.remove(itemName);
+        return this.items.remove(itemName.toLowerCase());
     }
     
     public void connect(Room destination, String exitName){
