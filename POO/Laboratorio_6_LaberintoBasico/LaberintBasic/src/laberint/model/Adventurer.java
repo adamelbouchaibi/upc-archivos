@@ -35,7 +35,17 @@ public class Adventurer {
         return NO_SUCH_EXIT;
     }
     public int pickUp(String itemName){
-        return 1;
+        Item n =room.retrieveItem(itemName);
+        if(n != null){
+            if(this.encumbrance+n.getEncumbrance()<=MAX_ENCUMBRANCE){
+                this.encumbrance+=n.getEncumbrance();
+                this.inventory.put(itemName, n);
+                return OK_ACTION;
+                
+            }else {
+                
+            }
+        }
     }
     
     public int drop (String itemName){

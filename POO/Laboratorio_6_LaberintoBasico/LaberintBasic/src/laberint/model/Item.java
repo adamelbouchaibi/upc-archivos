@@ -21,7 +21,7 @@ public class Item {
     // Resta de mètodes
     
     public String getName(){
-        return null;
+        return this.name;
     }
     
     public void setValue(int value){
@@ -31,7 +31,7 @@ public class Item {
     }
     
     public int getEncumbrance(){
-        return 1;
+        return this.encumbrance;
     }
     
     

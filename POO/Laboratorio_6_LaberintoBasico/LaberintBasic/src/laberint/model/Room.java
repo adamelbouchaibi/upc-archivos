@@ -28,10 +28,12 @@ public class Room {
         return this.name;
     }
     
-    public void putItem(Item item){}
+    public void putItem(Item item){
+        this.items.put(item.getName(),item);
+    }
     
     public Item retrieveItem(String itemName){
-        return null;
+        return this.items.remove(itemName);
     }
     
     public void connect(Room destination, String exitName){
