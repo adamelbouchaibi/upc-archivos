@@ -43,9 +43,12 @@ public class Adventurer {
                 return OK_ACTION;
                 
             }else {
-                
+                room.putItem(n);
+                return INVENTORY_IS_FULL;
             }
         }
+        
+        return NO_SUCH_ITEM_IN_ROOM;
     }
     
     public int drop (String itemName){
