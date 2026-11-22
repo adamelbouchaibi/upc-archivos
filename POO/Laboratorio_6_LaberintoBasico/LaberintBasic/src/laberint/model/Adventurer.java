@@ -57,6 +57,7 @@ public class Adventurer {
         
         if(i!=null){
             room.putItem(i);
+            this.encumbrance-=i.getEncumbrance();
             return OK_ACTION;
         }else {
             return NO_SUCH_ITEM_IN_INVENTORY;
