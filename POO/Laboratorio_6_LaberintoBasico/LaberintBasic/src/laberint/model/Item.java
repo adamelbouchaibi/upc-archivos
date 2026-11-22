@@ -12,6 +12,10 @@ public class Item {
     
     // Mètode constructor
     public Item(String name, String description){
+        this.name=name;
+        this.description=description;
+        this.value=0;
+        this.encumbrance=0;
     }
     
     // Resta de mètodes

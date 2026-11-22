@@ -16,6 +16,10 @@ public class Room {
     //Mètode Constructor
     
     public Room (String name, String description){
+        this.name=name;
+        this.description=description;
+        this.items=new HashMap<>();
+        this.exits = new HashMap<>();
     }
     
     // Altres Mètodes
@@ -31,6 +35,7 @@ public class Room {
     }
     
     public void connect(Room destination, String exitName){
+        this.exits.put(exitName,destination);
     }
     
     public Room nextRoom(String exitName){

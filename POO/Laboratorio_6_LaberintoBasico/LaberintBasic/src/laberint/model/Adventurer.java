@@ -18,7 +18,11 @@ public class Adventurer {
     public static final int OK_ACTION = 0;
     
     // Mètode constructor
-    public Adventurer(String name, Room startLocation){  
+    public Adventurer(String name, Room startLocation){
+        this.name=name;
+        this.room=startLocation;
+        this.encumbrance=0;
+        this.inventory=new java.util.TreeMap<>();
     }
     
     // Mètodes
