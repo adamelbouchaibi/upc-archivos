@@ -23,7 +23,12 @@ public class Adventurer {
     
     // Mètodes
     public int move (String exitName){
-        return 1;
+        if(room.nextRoom(exitName)!=null){
+            room = room.nextRoom(exitName);
+            return OK_ACTION;
+        }
+        
+        return NO_SUCH_EXIT;
     }
     public int pickUp(String itemName){
         return 1;
@@ -33,7 +38,7 @@ public class Adventurer {
         return 1;
     }
     public Room getCurrentLocation(){
-        return null;
+        return this.room;
     }
     
     /** Retorna un String amb les dades de tots els items de l'inventari de l'aventurer.

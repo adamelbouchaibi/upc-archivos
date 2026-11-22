@@ -21,7 +21,7 @@ public class Room {
     // Altres Mètodes
     
     public String getName(){
-        return null;
+        return this.name;
     }
     
     public void putItem(Item item){}
@@ -30,11 +30,18 @@ public class Room {
         return null;
     }
     
-    public void connect(Room destination, String exitName){}
+    public void connect(Room destination, String exitName){
+    }
     
     public Room nextRoom(String exitName){
+        
+        if(exits.get(exitName)!=null){
+           return exits.get(exitName);
+        }
+        
         return null;
     }
+    
     
     
     
