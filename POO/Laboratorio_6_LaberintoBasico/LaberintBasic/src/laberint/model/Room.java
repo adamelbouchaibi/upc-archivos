@@ -35,11 +35,11 @@ public class Room {
     }
     
     public void connect(Room destination, String exitName){
-        this.exits.put(exitName,destination);
+        this.exits.put(exitName.toLowerCase(),destination);
     }
     
     public Room nextRoom(String exitName){
-        
+        exitName=exitName.toLowerCase();
         if(exits.get(exitName)!=null){
            return exits.get(exitName);
         }
